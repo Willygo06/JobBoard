@@ -33,9 +33,9 @@ CREATE TABLE people (
     last_name VARCHAR(100),
     email VARCHAR(100),
     phone VARCHAR(20),
-    role ENUM('recruiter', 'applicant'),
-    company_id INT,
-    FOREIGN KEY (company_id) REFERENCES companies(id)
+    address VARCHAR(255),
+    zipcode INT,
+    role ENUM('recruiter', 'applicant')
 );
 
 -- Create the applications table
