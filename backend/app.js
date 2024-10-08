@@ -1,22 +1,37 @@
-require("dotenv").config();
+const express = require('express');
+const cors = require('cors');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const app = express();
 
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-
-var app = express();
-
-app.use(logger("dev"));
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+// Route pour GET
+app.get('/my/example/get', async (req, res) => {
+    try {
+      const example= await prisma.my_table_name_in_db.findMany();
+      res.json(example);
+    } catch (error) {
+      res.status(500).json({ error: 'Erreur serveur' });
+    }
+  });
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+// Route pour POST
+app.post('/my/example/post', async (req, res) => {
+  const { name, email } = req.body;
+  try {
+    const example= await prisma.my_table_name_in_db.create({
+      data: {
+        name,
+        email,
+      },
+    });
+    res.json(example);
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
 
-module.exports = app;
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("Serveur démarré sur le port ${PORT}"));
