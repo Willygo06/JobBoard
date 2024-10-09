@@ -9,10 +9,10 @@ const BackToTopButton = () => {
   return (
     <button
       onClick={handleScrollToTop}
-      className="fixed bottom-4 right-4 bg-blue-500 text-white rounded-full p-2 shadow-lg hover:bg-blue-600 transition duration-300"
-    >
-      &#8593; {/* Up arrow symbol */}
-    </button>
+      className="fixed bottom-4 right-4 bg-blue-500 text-white rounded-full w-6 h-8 flex items-center justify-center shadow-lg hover:bg-blue-600 transition duration-300"
+      >
+        <i className="fa-solid fa-arrow-up"></i> {/* Add the className to the icon */}
+      </button>
   );
 };
 
