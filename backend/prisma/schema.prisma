@@ -8,34 +8,51 @@ datasource db {
 }
 
 model People {
-  id        Int      @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   firstName String
   lastName  String
-  email     String   @unique
+  email     String       @unique
   phone     String
   address   String
   zipcode   Int
   role      String
-  companyId Int      // Clé étrangère
-  company   Company  @relation(fields: [companyId], references: [id])
+  applications Application[] // Relation One-to-Many avec Application
 }
 
 model Company {
-  id           Int      @id @default(autoincrement())
+  id           Int            @id @default(autoincrement())
   name         String
   industry     String
   location     Int
   website      String
   contactEmail String
-  employees    People[] // Relation One-to-Many avec Person
+  advertisements Advertisements[] // Relation One-to-Many avec Advertisements
 }
 
-
 model Advertisements {
-  id          Int     @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   title       String
   description String
+  details     String
   location    String
-  salary      Float
+  salary      String
+  benefits    String
+  hours       String
   contactEmail String
+  applications Application[] // Relation One-to-Many avec Application
+
+  Company Company[]
+}
+
+model Application {
+  id              Int          @id @default(autoincrement())
+  jobId           Int          // Clé étrangère vers la table Advertisements
+  applicantId     Int          // Clé étrangère vers la table People
+  applicationDate DateTime     @default(now()) // Date de la candidature
+  state          String       // Statut de la candidature (ex: "en attente", "acceptée", "rejetée")
+  message         String
+
+  // Relations
+  advertisement   Advertisements @relation(fields: [jobId], references: [id])
+  applicant       People         @relation(fields: [applicantId], references: [id])
 }
