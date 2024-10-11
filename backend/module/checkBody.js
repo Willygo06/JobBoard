@@ -6,6 +6,8 @@ function checkBody(body, keys) {
       isValid = false;
     }
   }
+
   return isValid;
 }
+
 module.exports = { checkBody };
