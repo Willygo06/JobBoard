@@ -12,9 +12,10 @@ model People {
   firstName String
   lastName  String
   email     String       @unique
+  password  String
   phone     String
   address   String
-  zipcode   Int
+  zipcode   String
   role      String
   applications Application[] // Relation One-to-Many avec Application
 }
@@ -23,8 +24,8 @@ model Company {
   id           Int            @id @default(autoincrement())
   name         String
   industry     String
-  location     Int
-  website      String
+  location     String
+  website      String?
   contactEmail String
   advertisements Advertisements[] // Relation One-to-Many avec Advertisements
 }
@@ -40,8 +41,8 @@ model Advertisements {
   hours       String
   contactEmail String
   applications Application[] // Relation One-to-Many avec Application
-
-  Company Company[]
+  companyId   Int?     // Clé étrangère pour l'entreprise
+  Company     Company?      @relation(fields: [companyId], references: [id]) // Relation un-à-plusieurs
 }
 
 model Application {

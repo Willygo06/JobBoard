@@ -7,6 +7,7 @@ const jobs = [
       description: 'Rejoignez notre équipe dynamique pour développer des applications web modernes.',
       moreInfo: {
         details: 'Nous recherchons un développeur front-end passionné pour construire des interfaces utilisateur avec React et Tailwind. Vous travaillerez avec une équipe talentueuse dans un environnement Agile.',
+        location: 'Nice',
         salary: '35,000€ - 45,000€ par an',
         hours: '35 heures par semaine',
         benefits: 'Télétravail, RTT, Mutuelle'
@@ -18,6 +19,7 @@ const jobs = [
       description: 'Travaillez sur des API robustes et des systèmes de gestion de base de données.',
       moreInfo: {
         details: "Nous avons besoin d'un développeur back-end capable de travailler avec Node.js et des bases de données SQL. Vous participerez à la conception et à la maintenance de nos systèmes internes.",
+        location: 'Nice',
         salary: '40,000€ - 50,000€ par an',
         hours: '40 heures par semaine',
         benefits: 'Tickets restaurant, Transport, Mutuelle'
@@ -29,6 +31,7 @@ const jobs = [
       description: 'Concevez des expériences utilisateur intuitives et engageantes.',
       moreInfo: {
         details: 'Votre travail consistera à créer des interfaces élégantes et fonctionnelles pour des utilisateurs finaux. Vous devez avoir une bonne compréhension des tendances actuelles en matière de design.',
+        location: 'Nice',
         salary: '40,000€ - 50,000€ par an',
         hours: '35 heures par semaine',
         benefits: 'Télétravail, Formation continue, Mutuelle d\'entreprise'
@@ -40,6 +43,7 @@ const jobs = [
       description: 'Gérez une équipe de développeurs pour assurer la bonne mise en œuvre des projets IT.',
       moreInfo: {
         details: 'En tant que Chef de Projet IT, vous superviserez la planification, le suivi et la mise en œuvre des projets technologiques de l\'entreprise.',
+        location: 'Nice',
         salary: '50,000€ - 60,000€ par an',
         hours: '39 heures par semaine',
         benefits: 'Voiture de fonction, Bonus annuel, Télétravail'
@@ -51,6 +55,7 @@ const jobs = [
       description: 'Assurez la sécurité de nos systèmes d\'informations et protégez nos données sensibles.',
       moreInfo: {
         details: 'Vous serez responsable de la mise en œuvre de politiques de sécurité, d\'audits et de la protection des infrastructures IT.',
+        location: 'Nice',
         salary: '55,000€ - 65,000€ par an',
         hours: '38 heures par semaine',
         benefits: 'Formations, Mutuelle, Prévoyance'
