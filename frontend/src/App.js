@@ -3,8 +3,6 @@ import Header from './header';
 import JobBoard from './jobboard';
 import Footer from './footer';
 import BackToTop from './backtotopbutton';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import Toastify (pour les notifs)
 
 function App() {
   return (
