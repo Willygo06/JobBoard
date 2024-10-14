@@ -19,14 +19,17 @@ router.get('/', async (req, res, next) => {
 
 // Route POST pour créer une nouvelle candidature
 router.post('/', async (req, res, next) => {
-  const { jobId, applicantId, message } = req.body;
+  const { jobId, applicantId, message, guestName, guestEmail } = req.body;
+
   try {
     const newApplication = await prisma.application.create({
       data: {
         jobId,
-        applicantId,
+        applicantId: applicantId || null, // Si l'utilisateur n'est pas connecté, applicantId sera null
         message,
         state: 'en attente',
+        guestName: guestName || null, // Stocker le nom si fourni
+        guestEmail: guestEmail || null, // Stocker l'email si fourni
       },
     });
     res.status(201).json(newApplication);

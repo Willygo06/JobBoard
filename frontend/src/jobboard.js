@@ -1,75 +1,47 @@
-import React, { useState } from 'react';
-
-const jobs = [
-    {
-      id: 1,
-      title: 'Développeur Front-End',
-      description: 'Rejoignez notre équipe dynamique pour développer des applications web modernes.',
-      moreInfo: {
-        details: 'Nous recherchons un développeur front-end passionné pour construire des interfaces utilisateur avec React et Tailwind. Vous travaillerez avec une équipe talentueuse dans un environnement Agile.',
-        location: 'Nice',
-        salary: '35,000€ - 45,000€ par an',
-        hours: '35 heures par semaine',
-        benefits: 'Télétravail, RTT, Mutuelle'
-      }
-    },
-    {
-      id: 2,
-      title: 'Développeur Back-End',
-      description: 'Travaillez sur des API robustes et des systèmes de gestion de base de données.',
-      moreInfo: {
-        details: "Nous avons besoin d'un développeur back-end capable de travailler avec Node.js et des bases de données SQL. Vous participerez à la conception et à la maintenance de nos systèmes internes.",
-        location: 'Nice',
-        salary: '40,000€ - 50,000€ par an',
-        hours: '40 heures par semaine',
-        benefits: 'Tickets restaurant, Transport, Mutuelle'
-      }
-    },
-    {
-      id: 3,
-      title: 'Designer UI/UX',
-      description: 'Concevez des expériences utilisateur intuitives et engageantes.',
-      moreInfo: {
-        details: 'Votre travail consistera à créer des interfaces élégantes et fonctionnelles pour des utilisateurs finaux. Vous devez avoir une bonne compréhension des tendances actuelles en matière de design.',
-        location: 'Nice',
-        salary: '40,000€ - 50,000€ par an',
-        hours: '35 heures par semaine',
-        benefits: 'Télétravail, Formation continue, Mutuelle d\'entreprise'
-      }
-    },
-    {
-      id: 4,
-      title: 'Chef de Projet IT',
-      description: 'Gérez une équipe de développeurs pour assurer la bonne mise en œuvre des projets IT.',
-      moreInfo: {
-        details: 'En tant que Chef de Projet IT, vous superviserez la planification, le suivi et la mise en œuvre des projets technologiques de l\'entreprise.',
-        location: 'Nice',
-        salary: '50,000€ - 60,000€ par an',
-        hours: '39 heures par semaine',
-        benefits: 'Voiture de fonction, Bonus annuel, Télétravail'
-      }
-    },
-    {
-      id: 5,
-      title: 'Ingénieur Sécurité',
-      description: 'Assurez la sécurité de nos systèmes d\'informations et protégez nos données sensibles.',
-      moreInfo: {
-        details: 'Vous serez responsable de la mise en œuvre de politiques de sécurité, d\'audits et de la protection des infrastructures IT.',
-        location: 'Nice',
-        salary: '55,000€ - 65,000€ par an',
-        hours: '38 heures par semaine',
-        benefits: 'Formations, Mutuelle, Prévoyance'
-      }
-    }
-  ];
-  // Vous pouvez ajouter d'autres offres avec plus d'informations ici
+import React, { useState, useEffect } from 'react';
+import ApplyPopup from './ApplyPopup'; // Assure-toi d'importer le composant ApplyPopup
 
 const JobBoard = () => {
-  const [openJobId, setOpenJobId] = useState(null); // État pour suivre l'offre ouverte
+  const [jobs, setJobs] = useState([]);
+  const [openJobId, setOpenJobId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  useEffect(() => {
+    // Récupérer les annonces depuis l'API
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/advertisements'); // URL de l'API des annonces
+        const data = await response.json();
+        setJobs(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Erreur lors du fetch des annonces:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
 
   const toggleMoreInfo = (id) => {
     setOpenJobId(openJobId === id ? null : id);
   };
+
+  const openApplyPopup = (job) => {
+    setSelectedJob(job);
+    setIsPopupOpen(true);
+  };
+
+  const closeApplyPopup = () => {
+    setIsPopupOpen(false);
+    setSelectedJob(null);
+  };
+
+  if (loading) {
+    return <div className="p-8 max-w-3xl"><p>Chargement des offres d'emploi...</p></div>;
+  }
 
   return (
     <div className="p-8 max-w-3xl mx-auto text-center scroll-smooth">
@@ -87,18 +59,26 @@ const JobBoard = () => {
               {openJobId === job.id ? 'Réduire' : 'En savoir plus'}
             </button>
 
-            {/* Si l'ID de l'offre correspond à celui de l'état, on affiche plus d'infos */}
             {openJobId === job.id && (
-              <div className="mt-4 p-4 bg-gray-100 rounded">
-                <p className="text-gray-800"><strong>Description du poste :</strong> {job.moreInfo.details}</p>
-                <p className="text-gray-800 mt-2"><strong>Salaire :</strong> {job.moreInfo.salary}</p>
-                <p className="text-gray-800 mt-2"><strong>Heures :</strong> {job.moreInfo.hours}</p>
-                <p className="text-gray-800 mt-2"><strong>Avantages :</strong> {job.moreInfo.benefits}</p>
+              <div className="mt-4 p-4 bg-gray-100 rounded text-left">
+                <p className="text-gray-800"><strong>Description du poste :</strong> {job.details}</p>
+                <p className="text-gray-800 mt-2"><strong>Localisation :</strong> {job.location}</p>
+                <p className="text-gray-800 mt-2"><strong>Salaire :</strong> {job.salary}</p>
+                <p className="text-gray-800 mt-2"><strong>Heures :</strong> {job.hours}</p>
+                <p className="text-gray-800 mt-2"><strong>Avantages :</strong> {job.benefits}</p>
+                <p className="text-gray-800 mt-2"><strong>Contact :</strong> {job.contactEmail}</p>
+                <button
+                  onClick={() => openApplyPopup(job)}
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-200"
+                >
+                  Postuler
+                </button>
               </div>
             )}
           </div>
         ))}
       </div>
+      {isPopupOpen && <ApplyPopup job={selectedJob} onClose={closeApplyPopup} />}
     </div>
   );
 };
