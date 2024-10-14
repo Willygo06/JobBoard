@@ -11,12 +11,8 @@ model People {
   id        Int          @id @default(autoincrement())
   firstName String
   lastName  String
-<<<<<<< HEAD
   email     String       @unique
   password  String
-=======
-  email     String   @unique
->>>>>>> origin/main
   phone     String
   address   String
   zipcode   String
@@ -52,12 +48,16 @@ model Advertisements {
 model Application {
   id              Int          @id @default(autoincrement())
   jobId           Int          // Clé étrangère vers la table Advertisements
-  applicantId     Int          // Clé étrangère vers la table People
+  applicantId     Int?          // Clé étrangère vers la table People
   applicationDate DateTime     @default(now()) // Date de la candidature
-  state          String       // Statut de la candidature (ex: "en attente", "acceptée", "rejetée")
   message         String
+  state           String       @default("en attente")// Statut de la candidature (ex: "en attente", "acceptée", "rejetée")
+
 
   // Relations
   advertisement   Advertisements @relation(fields: [jobId], references: [id])
-  applicant       People         @relation(fields: [applicantId], references: [id])
+  applicant       People?         @relation(fields: [applicantId], references: [id])
+  // D'autres champs pour stocker les informations temporaires d'un utilisateur non enregistré
+  guestName       String?  // Nom du candidat invité
+  guestEmail      String?  // Email du candidat invité
 }

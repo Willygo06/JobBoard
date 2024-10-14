@@ -2,7 +2,9 @@ import React from 'react';
 import Header from './header';
 import JobBoard from './jobboard';
 import Footer from './footer';
-import BackToTop from './backtotopbutton'; // Ajout de l'import pour BackToTop
+import BackToTop from './backtotopbutton';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastify (pour les notifs)
 
 function App() {
   return (
@@ -12,7 +14,7 @@ function App() {
         <JobBoard />
       </div>
       <Footer />
-      <BackToTop /> {/* Ajout du bouton BackToTop ici */}
+      <BackToTop />
     </div>
   );
 }
