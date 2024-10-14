@@ -11,12 +11,8 @@ model People {
   id        Int          @id @default(autoincrement())
   firstName String
   lastName  String
-<<<<<<< HEAD
   email     String       @unique
   password  String
-=======
-  email     String   @unique
->>>>>>> origin/main
   phone     String
   address   String
   zipcode   String

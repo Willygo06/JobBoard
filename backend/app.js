@@ -7,26 +7,25 @@ const { PrismaClient } = require('@prisma/client');
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
->>>>>>> origin/main
+
 const app = express();
-const errorHandler = require('./middleware/errorHandler'); // Import du middleware qui est séparé pour gérer les erreurs
+const errorHandler = require("./middleware/errorHandler"); // Import du middleware qui est séparé pour gérer les erreurs
 
 // Import des routes
-const advertisementsRoutes = require('./routes/advertisements');
-const applicationsRoutes = require('./routes/applications');
-const peopleRoutes = require('./routes/people');
-const companiesRoutes = require('./routes/companies');
+const advertisementsRoutes = require("./routes/advertisements");
+const applicationsRoutes = require("./routes/applications");
+const peopleRoutes = require("./routes/people");
+const companiesRoutes = require("./routes/companies");
 
 app.use(cors());
 <<<<<<< HEAD
 app.use(express.json()); // Pour traiter les requêtes en JSON
 
 // Utilisation des routes
-app.use('/api/advertisements', advertisementsRoutes);
-app.use('/api/applications', applicationsRoutes);
-app.use('/api/people', peopleRoutes);
-app.use('/api/companies', companiesRoutes);
+app.use("/api/advertisements", advertisementsRoutes);
+app.use("/api/applications", applicationsRoutes);
+app.use("/api/people", peopleRoutes);
+app.use("/api/companies", companiesRoutes);
 
 // Middleware de gestion des erreurs (doit être le dernier middleware)
 app.use(errorHandler);
