@@ -16,7 +16,7 @@ model People {
   phone     String
   address   String
   zipcode   String
-  role      String
+  role      String      @default("user") // "user", "admin"
   applications Application[] // Relation One-to-Many avec Application
 }
 
