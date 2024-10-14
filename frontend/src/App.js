@@ -12,7 +12,7 @@ function App() {
         <JobBoard />
       </div>
       <Footer />
-      <BackToTop /> {/* Ajout du bouton BackToTop ici */}
+      <BackToTop />
     </div>
   );
 }
