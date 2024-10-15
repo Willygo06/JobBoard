@@ -18,7 +18,7 @@ export default function registerPeople() {
     const cleanedNumber = input.replace(/[^0-9]/g, "");
 
     if (cleanedNumber.length <= 10) {
-      setNmber(cleanedNumber);
+      setNumber(cleanedNumber);
     }
   };
 

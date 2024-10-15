@@ -1,9 +1,10 @@
 // Header.js
 import React from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addFriendToStore } from "../reducers/friends";
-import { peopleLogin, peopleLogout} from "../reducers/users"
+// import { useDispatch } from "react-redux";
+// import { toast } from "react-toastify";
+// import { addFriendToStore } from "../reducers/friends";
+import { peopleLogin, peopleLogout } from "./reducers/users";
 
 function Header() {
   const [loginPeople, setLoginPeople] = useState(false);
@@ -11,43 +12,45 @@ function Header() {
   const [emailPeople, setEmailpeople] = useState(false);
   const [passwordPeople, setPasswordPeople] = useState(false);
 
-  const handleConnection = () => {
-    fetch("", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: emailPeople,
-        password: passwordPeople,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(peopleLogin({
-            firstname: data.data.firstname,
-            lastname: data.data.lastname,
-          
-          }));
-          window.location.href = "/#";
-          setEmailpeople("");
-          setPasswordPeople("")
+  // const dispatch = useDispatch();
 
-        } else{
-          console.log(data.error);
-          toast.error(data.error, {
-            position: "top-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
-      }
-      });
-  }
-  };
+  // const handleConnection = () => {
+  //   fetch("", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       email: emailPeople,
+  //       password: passwordPeople,
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.result) {
+  //         dispatch(
+  //           peopleLogin({
+  //             firstname: data.data.firstname,
+  //             lastname: data.data.lastname,
+  //           })
+  //         );
+  //         window.location.href = "/#";
+  //         setEmailpeople("");
+  //         setPasswordPeople("");
+  //       } else {
+  //         console.log(data.error);
+  //         toast.error(data.error, {
+  //           position: "top-left",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //           theme: "light",
+  //         });
+  //       }
+  //     });
+  // };
+
   return (
     <header className="w-full bg-gray-800 text-white py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
