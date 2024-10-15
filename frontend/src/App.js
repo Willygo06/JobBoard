@@ -1,8 +1,9 @@
-import React from "react";
-import Header from "./header";
-import JobBoard from "./jobboard";
-import Footer from "./footer";
-import BackToTop from "./backtotopbutton"; // Ajout de l'import pour BackToTop
+import React from 'react';
+
+import Header from './elements/header';
+import JobBoard from './jobboard';
+import Footer from './elements/footer';
+import BackToTop from './elements/backtotopbutton';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       </div>
       <Footer />
       <BackToTop />
+      
     </div>
   );
 }
