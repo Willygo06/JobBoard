@@ -12,6 +12,45 @@ function Header() {
     console.log("Utilisateur connecté :", userData);
   };
 
+  // const dispatch = useDispatch();
+
+  // const handleConnection = () => {
+  //   fetch("", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       email: emailPeople,
+  //       password: passwordPeople,
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.result) {
+  //         dispatch(
+  //           peopleLogin({
+  //             firstname: data.data.firstname,
+  //             lastname: data.data.lastname,
+  //           })
+  //         );
+  //         window.location.href = "/#";
+  //         setEmailpeople("");
+  //         setPasswordPeople("");
+  //       } else {
+  //         console.log(data.error);
+  //         toast.error(data.error, {
+  //           position: "top-left",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //           theme: "light",
+  //         });
+  //       }
+  //     });
+  // };
+
   return (
     <header className="w-full bg-gray-800 text-white py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
