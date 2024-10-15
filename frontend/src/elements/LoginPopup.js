@@ -1,35 +1,39 @@
-// LoginPopup.js
 import React, { useState } from "react";
-import { toast } from "react-toastify"; // Installe cette bibliothèque
+import { toast } from "react-toastify";
 
 const LoginPopup = ({ onClose }) => {
   const [emailPeople, setEmailpeople] = useState("");
   const [passwordPeople, setPasswordPeople] = useState("");
 
-  const handleConnection = () => {
-    fetch("/api/people", { 
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: emailPeople,
-        password: passwordPeople,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          // Logique pour la connexion réussie
-          window.location.href = "/#";
-          setEmailpeople("");
-          setPasswordPeople("");
-        } else {
-          toast.error(data.error || "Erreur de connexion", {
-            position: "top-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-          });
-        }
+  const handleConnection = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/people/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailPeople,
+          password: passwordPeople,
+        }),
       });
+      const data = await response.json();
+      
+      if (data.result) {
+        // Logique pour la connexion réussie
+        toast.success("Connexion réussie !");
+        window.location.href = "/#"; // Redirection après connexion réussie
+        setEmailpeople(""); // Réinitialiser le champ email
+        setPasswordPeople(""); // Réinitialiser le champ mot de passe
+      } else {
+        toast.error(data.error || "Erreur de connexion", {
+          position: "top-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la connexion :", error);
+      toast.error("Une erreur inattendue s'est produite.");
+    }
   };
 
   return (

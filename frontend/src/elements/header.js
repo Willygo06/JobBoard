@@ -1,14 +1,15 @@
-// Header.js
 import React, { useState } from "react";
-import LoginModal from "./LoginModal"; // Assurez-vous d'importer le composant LoginModal
+import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 
 function Header() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // État pour le pop-up de connexion
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false); // État pour le pop-up de création de compte
+
 
   const handleLoginSuccess = (userData) => {
     // Gérer les données de l'utilisateur connecté
     console.log("Utilisateur connecté :", userData);
-    // Vous pouvez ici ajouter une logique supplémentaire pour gérer l'utilisateur
   };
 
   return (
@@ -37,6 +38,15 @@ function Header() {
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)} // Fermer le pop-up
         onLogin={handleLoginSuccess} // Passer la fonction de succès de connexion
+        onRegister={() => { // Ajouter la logique d'ouverture de création de compte
+          setIsLoginModalOpen(false);
+          setIsRegisterModalOpen(true); 
+        }} 
+      />
+      {/* Afficher le pop-up de création de compte */}
+      <RegisterModal
+        isOpen={isRegisterModalOpen}
+        onClose={() => setIsRegisterModalOpen(false)} // Fermer le pop-up
       />
     </header>
   );
