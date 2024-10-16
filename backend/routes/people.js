@@ -1,13 +1,18 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const router = express.Router();
 const prisma = require("../prismaClient");
 const { checkBody } = require("../module/checkBody");
-const { findUserByEmail } = require("../module/userUtils");
+const {
+  findUserByEmail,
+  findUserTokenByEmail,
+} = require("../module/userUtils");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 function validateEmail(email) {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -126,6 +131,8 @@ router.post("/login", async (req, res) => {
   try {
     // Trouver l'utilisateur par e-mail
     const user = await findUserByEmail(email);
+    const token = await findUserTokenByEmail(email);
+    console.log(token);
 
     // Vérifier si l'utilisateur existe
     if (!user) {
@@ -143,7 +150,12 @@ router.post("/login", async (req, res) => {
     }
 
     // Si tout est correct, retourner les données de l'utilisateur
-    return res.json({ result: true, data: { id: user.id, email: user.email } });
+    return res
+      .cookie("token", token, {
+        httpOnly: false,
+        path: "/",
+      })
+      .json({ result: true, data: { id: user.id, email: user.email, token } });
   } catch (error) {
     console.error("Erreur lors de la connexion :", error);
     return res

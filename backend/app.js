@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
 const errorHandler = require("./middleware/errorHandler"); // Import du middleware qui est séparé pour gérer les erreurs
-const bodyParser = require('body-parser'); // Ajout de ce middleware
+const bodyParser = require("body-parser"); // Ajout de ce middleware
 
 const app = express();
 
@@ -15,7 +15,6 @@ const companiesRoutes = require("./routes/companies");
 app.use(cors());
 app.use(express.json()); // Pour traiter les requêtes en JSON
 app.use(bodyParser.json()); // Middleware
-
 
 // Utilisation des routes
 app.use("/api/advertisements", advertisementsRoutes);
