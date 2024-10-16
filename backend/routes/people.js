@@ -114,13 +114,14 @@ router.post("/", async (req, res, next) => {
     console.error("Erreur lors de la création de la personne:", error);
     res
       .status(500)
-      .json({ error: "Erreur lors de la création de la personne." });
+      .json({ error: "Erreur lors de la création de la personne.",        
+      details: error.message  // Ajoutez des détails sur l'erreur
+      });
   }
 });
 
 // Route POST pour la connexion d'un utilisateur
 router.post("/login", async (req, res) => {
-  console.log("Requête de connexion reçue :", req.body);
   const { email, password } = req.body;
 
   try {
@@ -160,7 +161,7 @@ router.put("/:id", async (req, res, next) => {
     req.body;
   try {
     const updatedPerson = await prisma.people.update({
-      where: { id: parseInt(id) },
+      where: { id: id },
       data: {
         firstName,
         lastName,
@@ -186,7 +187,7 @@ router.delete("/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
     await prisma.people.delete({
-      where: { id: parseInt(id) },
+      where: { id: id },
     });
     res.status(204).send();
   } catch (error) {

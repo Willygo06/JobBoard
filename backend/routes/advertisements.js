@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaClient'); // Assure-toi que le client Prisma est correctement importé
+const { checkBody } = require("../module/checkBody");
 
 // Route GET pour récupérer toutes les annonces
 router.get('/', async (req, res, next) => {
@@ -8,7 +9,7 @@ router.get('/', async (req, res, next) => {
     const advertisements = await prisma.advertisements.findMany({
       include: {
         applications: true, // Inclure les candidatures liées
-        Company: true, // Inclure les entreprises liées
+        company: true, // Inclure les entreprises liées
       },
     });
     res.json(advertisements);

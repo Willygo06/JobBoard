@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaClient');
+const { checkBody } = require("../module/checkBody");
 
 // Route GET pour récupérer toutes les candidatures
 router.get('/', async (req, res, next) => {

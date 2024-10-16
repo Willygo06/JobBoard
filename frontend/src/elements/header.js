@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 
 function Header() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // État pour le pop-up de connexion
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false); // État pour le pop-up de création de compte
-
 
   const handleLoginSuccess = (userData) => {
     // Gérer les données de l'utilisateur connecté
@@ -50,7 +51,7 @@ function Header() {
   //       }
   //     });
   // };
-
+  
   return (
     <header className="w-full bg-gray-800 text-white py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -69,9 +70,18 @@ function Header() {
           <a href="#jobs" className="hover:text-blue-500 transition duration-200">
             Offres d'emploi
           </a>
-          
+
+          {/* Bouton pour accéder à l'admin tool */}
+          <Link to="/admin/dashboard">
+            <button
+              className="uppercase font-bold mx-auto shadow bg-green-600 hover:bg-green-500 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+            >
+              Admin Tool
+            </button>
+          </Link>
         </nav>
       </div>
+
       {/* Afficher le pop-up de connexion */}
       <LoginModal
         isOpen={isLoginModalOpen}
@@ -90,5 +100,4 @@ function Header() {
     </header>
   );
 }
-
 export default Header;
