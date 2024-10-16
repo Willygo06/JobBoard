@@ -16,10 +16,10 @@ const LoginPopup = ({ onClose }) => {
         }),
       });
       const data = await response.json();
-      
+
       if (data.result) {
         // Logique pour la connexion réussie
-        toast.success("Connexion réussie !");
+        toast.success("Connexion réussie !!");
         window.location.href = "/#"; // Redirection après connexion réussie
         setEmailpeople(""); // Réinitialiser le champ email
         setPasswordPeople(""); // Réinitialiser le champ mot de passe
@@ -61,9 +61,14 @@ const LoginPopup = ({ onClose }) => {
           Connexion
         </button>
         <p className="mt-4">
-          Pas de compte ? <a href="/register" className="text-blue-500">Créez-en un</a>
+          Pas de compte ?{" "}
+          <a href="/register" className="text-blue-500">
+            Créez-en un
+          </a>
         </p>
-        <button className="mt-4 text-red-500" onClick={onClose}>Fermer</button>
+        <button className="mt-4 text-red-500" onClick={onClose}>
+          Fermer
+        </button>
       </div>
     </div>
   );
