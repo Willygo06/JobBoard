@@ -15,19 +15,18 @@ function validatePassword(password) {
   return passwordRegex.test(password);
 }
 
-// Route GET pour récupérer toutes les personnes
+// Route GET pour récupérer les personnes par id
 router.get("/", async (req, res, next) => {
-  if (!checkBody(req.body, ["email", "password"])) {
-    res.json({ result: false, error: "Champs vides ou manquants" });
-    return;
-  }
-  const { email } = req.body;
-  if (!validateEmail(email)) {
-    res.json({ result: false, error: "Adresse e-mail invalide" });
-    return;
-  }
+  const { id } = req.query;
   try {
-    const people = await prisma.people.findMany();
+    let people;
+    if (id) {
+      people = await prisma.people.findUniqueOrThrow({
+        where: { id: id },
+      });
+    } else {
+      people = await prisma.people.findMany();
+    }
     res.json(people);
   } catch (error) {
     next({

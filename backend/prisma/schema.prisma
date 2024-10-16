@@ -8,7 +8,8 @@ datasource db {
 }
 
 model People {
-  id        Int          @id @default(autoincrement())
+  id        String  @id @default(uuid())
+  companyId String?
   firstName String
   lastName  String
   email     String       @unique
@@ -18,20 +19,22 @@ model People {
   zipcode   String
   role      String      @default("user") // "user", "admin"
   applications Application[] // Relation One-to-Many avec Application
+  company Company? @relation(fields: [companyId], references: [id], onUpdate: Cascade)
 }
 
 model Company {
-  id           Int            @id @default(autoincrement())
+  id           String  @id @default(uuid())
   name         String
   industry     String
   location     String
   website      String?
   contactEmail String
-  advertisements Advertisements[] // Relation One-to-Many avec Advertisements
+  advertisements Advertisements []// Relation One-to-Many avec Advertisements
+  people People []
 }
 
 model Advertisements {
-  id          Int           @id @default(autoincrement())
+  id          String  @id @default(uuid())
   title       String
   description String
   details     String
@@ -40,23 +43,23 @@ model Advertisements {
   benefits    String
   hours       String
   contactEmail String
+  companyId   String   // Clé étrangère pour l'entreprise
   applications Application[] // Relation One-to-Many avec Application
-  companyId   Int?     // Clé étrangère pour l'entreprise
-  Company     Company?      @relation(fields: [companyId], references: [id]) // Relation un-à-plusieurs
+  company     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade) // Relation un-à-plusieurs
 }
 
 model Application {
-  id              Int          @id @default(autoincrement())
-  jobId           Int          // Clé étrangère vers la table Advertisements
-  applicantId     Int?          // Clé étrangère vers la table People
+  id                        String  @id @default(uuid())
+  jobId           String          // Clé étrangère vers la table Advertisements
+  applicantId     String          // Clé étrangère vers la table People
   applicationDate DateTime     @default(now()) // Date de la candidature
   message         String
   state           String       @default("en attente")// Statut de la candidature (ex: "en attente", "acceptée", "rejetée")
 
 
   // Relations
-  advertisement   Advertisements @relation(fields: [jobId], references: [id])
-  applicant       People?         @relation(fields: [applicantId], references: [id])
+  advertisement   Advertisements @relation(fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  applicant       People         @relation(fields: [applicantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // D'autres champs pour stocker les informations temporaires d'un utilisateur non enregistré
   guestName       String?  // Nom du candidat invité
   guestEmail      String?  // Email du candidat invité
