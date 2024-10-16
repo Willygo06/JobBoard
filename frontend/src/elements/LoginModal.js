@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
+import { AuthContext } from "../contexts/AuthContext";
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-}
 const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
+  const { setIsLoggedIn } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,7 +25,9 @@ const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
         onLogin(data.data); // Appel de la fonction onLogin fournie par Header
 
         // Pour récupérer le cookie appelé "token"
+        toast.success("Connexion réussie !!");
         document.cookie = `token=${data.data.token}; path=/`;
+        setIsLoggedIn(true);
         // const token = getCookie("token");
         onClose(); // Fermer le pop-up
         setEmail(""); // Réinitialiser le champ email
