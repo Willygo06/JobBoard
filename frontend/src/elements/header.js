@@ -1,15 +1,55 @@
-// Header.js
 import React, { useState } from "react";
-import LoginModal from "./LoginModal"; // Assurez-vous d'importer le composant LoginModal
+import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 
 function Header() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // État pour le pop-up de connexion
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false); // État pour le pop-up de création de compte
+
 
   const handleLoginSuccess = (userData) => {
     // Gérer les données de l'utilisateur connecté
     console.log("Utilisateur connecté :", userData);
-    // Vous pouvez ici ajouter une logique supplémentaire pour gérer l'utilisateur
   };
+
+  // const dispatch = useDispatch();
+
+  // const handleConnection = () => {
+  //   fetch("", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       email: emailPeople,
+  //       password: passwordPeople,
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.result) {
+  //         dispatch(
+  //           peopleLogin({
+  //             firstname: data.data.firstname,
+  //             lastname: data.data.lastname,
+  //           })
+  //         );
+  //         window.location.href = "/#";
+  //         setEmailpeople("");
+  //         setPasswordPeople("");
+  //       } else {
+  //         console.log(data.error);
+  //         toast.error(data.error, {
+  //           position: "top-left",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //           theme: "light",
+  //         });
+  //       }
+  //     });
+  // };
 
   return (
     <header className="w-full bg-gray-800 text-white py-4">
@@ -37,6 +77,15 @@ function Header() {
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)} // Fermer le pop-up
         onLogin={handleLoginSuccess} // Passer la fonction de succès de connexion
+        onRegister={() => { // Ajouter la logique d'ouverture de création de compte
+          setIsLoginModalOpen(false);
+          setIsRegisterModalOpen(true); 
+        }} 
+      />
+      {/* Afficher le pop-up de création de compte */}
+      <RegisterModal
+        isOpen={isRegisterModalOpen}
+        onClose={() => setIsRegisterModalOpen(false)} // Fermer le pop-up
       />
     </header>
   );
