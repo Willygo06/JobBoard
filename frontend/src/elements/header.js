@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import LogoutModal from "./LogoutModal";
 import RegisterModal from "./RegisterModal";
@@ -52,68 +53,77 @@ function Header() {
   //       }
   //     });
   // };
-
+  
   return (
-    <header className="w-full bg-gray-800 text-white py-4">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-        <div className="text-2xl font-bold">
-          <a href="/" className="hover:text-blue-500 transition duration-200">
-            LFG
-          </a>
-        </div>
-        <nav className="space-x-6">
-          {!isLoggedIn ? (
-            <>
-              <button
-                className="uppercase font-bold mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
-                onClick={() => setIsLoginModalOpen(true)} // Ouvrir le pop-up
-              >
-                Se connecter
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="uppercase font-bold mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
-                onClick={() => "/"} // Ouvrir le pop-up
-              >
-                Mon profil
-              </button>
-
-              <button
-                className="uppercase font-bold mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
-                onClick={() => setIsLoginModalOpen(true)} // Ouvrir le pop-up
-              >
-                Se déconnecter
-              </button>
-            </>
-          )}
-          <a
-            href="#jobs"
-            className="hover:text-blue-500 transition duration-200"
-          >
-            Offres d'emploi
-          </a>
-        </nav>
+  <header className="w-full bg-gray-800 text-white py-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div className="text-2xl font-bold">
+        <a href="/" className="hover:text-blue-500 transition duration-200">
+          LFG
+        </a>
       </div>
-      {/* Afficher le pop-up de connexion */}
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)} // Fermer le pop-up
-        onLogin={handleLoginSuccess} // Passer la fonction de succès de connexion
-        onRegister={() => {
-          // Ajouter la logique d'ouverture de création de compte
-          setIsLoginModalOpen(false);
-          setIsRegisterModalOpen(true);
-        }}
-      />
-      {/* Afficher le pop-up de création de compte */}
-      <RegisterModal
-        isOpen={isRegisterModalOpen}
-        onClose={() => setIsRegisterModalOpen(false)} // Fermer le pop-up
-      />
-    </header>
-  );
-}
+      <nav className="space-x-6">
+        {!isLoggedIn ? (
+          <>
+            <button
+              className="uppercase font-bold mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+              onClick={() => setIsLoginModalOpen(true)} // Ouvrir le pop-up
+            >
+              Se connecter
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              className="uppercase font-bold mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+              onClick={() => "/"} // Ouvrir le pop-up
+            >
+              Mon profil
+            </button>
 
+            <button
+              className="uppercase font-bold mx-auto shadow bg-indigo-800 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+              onClick={() => setIsLoginModalOpen(true)} // Ouvrir le pop-up
+            >
+              Se déconnecter
+            </button>
+          </>
+        )}
+        <a
+          href="#jobs"
+          className="hover:text-blue-500 transition duration-200"
+        >
+          Offres d'emploi
+        </a>
+
+        {/* Bouton pour accéder à l'admin tool */}
+        <Link to="/admin/dashboard">
+          <button
+            className="uppercase font-bold mx-auto shadow bg-green-600 hover:bg-green-500 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+          >
+            Admin Tool
+          </button>
+        </Link>
+      </nav>
+    </div>
+
+    {/* Afficher le pop-up de connexion */}
+    <LoginModal
+      isOpen={isLoginModalOpen}
+      onClose={() => setIsLoginModalOpen(false)} // Fermer le pop-up
+      onLogin={handleLoginSuccess} // Passer la fonction de succès de connexion
+      onRegister={() => {
+        // Ajouter la logique d'ouverture de création de compte
+        setIsLoginModalOpen(false);
+        setIsRegisterModalOpen(true);
+      }}
+    />
+    {/* Afficher le pop-up de création de compte */}
+    <RegisterModal
+      isOpen={isRegisterModalOpen}
+      onClose={() => setIsRegisterModalOpen(false)} // Fermer le pop-up
+    />
+  </header>
+);
+}
 export default Header;

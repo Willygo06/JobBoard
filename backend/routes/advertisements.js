@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const prisma = require("../prismaClient"); // Assure-toi que le client Prisma est correctement importé
+const prisma = require('../prismaClient'); // Assure-toi que le client Prisma est correctement importé
+
 
 // Route GET pour récupérer toutes les annonces
 router.get("/", async (req, res, next) => {
