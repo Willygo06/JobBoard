@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
+import { AuthContext } from "../contexts/AuthContext";
 
 const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
+  const { setIsLoggedIn } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,10 +21,14 @@ const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
       const data = await response.json();
       console.log("Réponse de l'API :", data);
 
-      
       if (data.result) {
         onLogin(data.data); // Appel de la fonction onLogin fournie par Header
-        toast.success("Connexion réussie !");
+
+        // Pour récupérer le cookie appelé "token"
+        toast.success("Connexion réussie !!");
+        document.cookie = `token=${data.data.token}; path=/`;
+        setIsLoggedIn(true);
+        // const token = getCookie("token");
         onClose(); // Fermer le pop-up
         setEmail(""); // Réinitialiser le champ email
         setPassword(""); // Réinitialiser le champ mot de passe
@@ -40,7 +46,9 @@ const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl text-black font-bold mb-4">Se connecter à LFG</h2>
+        <h2 className="text-xl text-black font-bold mb-4">
+          Se connecter à LFG
+        </h2>
         <input
           type="email"
           placeholder="E-mail"
