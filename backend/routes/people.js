@@ -6,6 +6,7 @@ const { checkBody } = require("../module/checkBody");
 const {
   findUserByEmail,
   findUserTokenByEmail,
+  findUserByToken,
 } = require("../module/userUtils");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
@@ -28,6 +29,7 @@ function validatePassword(password) {
 const verifyPassword = async (inputPassword, storedPassword) => {
   return await bcrypt.compare(inputPassword, storedPassword);
 };
+
 // Route GET pour récupérer les personnes par id
 router.get("/", async (req, res, next) => {
   const { id } = req.query;
@@ -48,6 +50,42 @@ router.get("/", async (req, res, next) => {
     });
   }
 });
+
+// Route GET pour récupérer les informations de l'utilisateur par token (UUID)
+router.get("/me", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  const uuid = authHeader && authHeader.split(' ')[1];
+
+  if (!uuid) {
+    return res.status(401).json({ result: false, error: "Aucun token trouvé." });
+  }
+
+  try {
+    const user = await findUserByToken(uuid);
+    console.log("Utilisateur trouvé :", user); 
+
+    if (!user) {
+      // Si l'utilisateur n'est pas trouvé, renvoie une erreur 404
+      return res.status(404).json({ result: false, error: "Utilisateur non trouvé" });
+    }
+
+    // Renvoie les données de l'utilisateur en cas de succès
+    res.json({ result: true, data: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        zipcode: user.zipcode,
+    }});
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'utilisateur :", error);
+    // En cas d'erreur serveur, renvoie une erreur 500
+    return res.status(500).json({ result: false, error: "Erreur serveur" });
+  }
+});
+
 
 // Route POST pour créer une nouvelle personne
 router.post("/", async (req, res, next) => {
@@ -132,8 +170,8 @@ router.post("/login", async (req, res) => {
   try {
     // Trouver l'utilisateur par e-mail
     const user = await findUserByEmail(email);
-    const token = await findUserTokenByEmail(email);
-    console.log(token);
+    const uuid = await findUserTokenByEmail(email);
+    console.log(uuid);
 
     // Vérifier si l'utilisateur existe
     if (!user) {
@@ -152,11 +190,17 @@ router.post("/login", async (req, res) => {
 
     // Si tout est correct, retourner les données de l'utilisateur
     return res
-      .cookie("token", token, {
-        httpOnly: false,
+      .cookie("uuid", user.id, {
+        httpOnly: true,
         path: "/",
       })
-      .json({ result: true, data: { id: user.id, email: user.email, token } });
+      .json({
+        result: true,
+        data: {
+          id: user.id, // UUID de l'utilisateur
+          email: user.email
+        },
+      });
   } catch (error) {
     console.error("Erreur lors de la connexion :", error);
     return res
@@ -191,6 +235,46 @@ router.put("/:id", async (req, res, next) => {
       message: "Erreur lors de la mise à jour de la personne.",
       details: error.message,
     });
+  }
+});
+
+
+// Route PUT pour mettre à jour les informations de la personne
+router.put("/update", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  const uuid = authHeader && authHeader.split(' ')[1];
+
+  if (!uuid) {
+    return res.status(401).json({ result: false, error: "Non autorisé" });
+  }
+
+  const { firstName, lastName, email, phone, address, zipcode, password } = req.body;
+
+  try {
+    const updateData = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+      zipcode,
+    };
+
+    // Vérifiez si le mot de passe est fourni
+    if (password) {
+      const salt = bcrypt.genSaltSync(10); // Générer un sel
+      updateData.password = bcrypt.hashSync(password, salt); // Hash le mot de passe
+    }
+
+    const user = await prisma.people.update({
+      where: { id: uuid },
+      data: updateData,
+    });
+
+    return res.json({ result: true, user });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour des informations utilisateur:", error);
+    return res.status(500).json({ result: false, error: "Une erreur est survenue." });
   }
 });
 

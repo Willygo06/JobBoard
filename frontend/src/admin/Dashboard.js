@@ -41,47 +41,47 @@ const Dashboard = () => {
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
-      
+
       {/* Section des statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <a href="#users" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-200">
           <h2 className="text-xl font-bold mb-2">Total Utilisateurs</h2>
           <p className="text-3xl font-semibold">{totalUsers}</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        </a>
+        <a href="#advertisements" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-200">
           <h2 className="text-xl font-bold mb-2">Total Annonces</h2>
           <p className="text-3xl font-semibold">{totalAdvertisements}</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        </a>
+        <a href="#applications" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-200">
           <h2 className="text-xl font-bold mb-2">Total Candidatures</h2>
           <p className="text-3xl font-semibold">{totalApplications}</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        </a>
+        <a href="#companies" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-200">
           <h2 className="text-xl font-bold mb-2">Total Entreprises</h2>
           <p className="text-3xl font-semibold">{totalCompanies}</p>
-        </div>
+        </a>
       </div>
 
       {/* Section de gestion des utilisateurs */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
+      <div id="users" className="bg-white p-6 rounded-lg shadow-lg mb-6">
         <h2 className="text-2xl font-bold mb-4">Gestion des utilisateurs</h2>
         <Users /> {/* Affichage de la liste des utilisateurs */}
       </div>
 
       {/* Section de gestion des annonces */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
+      <div id="advertisements" className="bg-white p-6 rounded-lg shadow-lg mb-6">
         <h2 className="text-2xl font-bold mb-4">Gestion des annonces</h2>
         <Advertisements /> {/* Affichage des annonces */}
       </div>
 
       {/* Section de gestion des candidatures */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
+      <div id="applications" className="bg-white p-6 rounded-lg shadow-lg mb-6">
         <h2 className="text-2xl font-bold mb-4">Gestion des candidatures</h2>
         <Applications /> {/* Affichage des candidatures */}
       </div>
 
       {/* Section de gestion des entreprises */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div id="companies" className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4">Gestion des entreprises</h2>
         <Companies /> {/* Affichage des entreprises */}
       </div>

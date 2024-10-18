@@ -4,8 +4,11 @@ import Header from './elements/header';
 import JobBoard from './jobboard';
 import Footer from './elements/footer';
 import BackToTop from './elements/backtotopbutton';
-import AdminPage from './admin/Dashboard'; // Ajout de la route pour l'admin dashboard
+import AdminPage from './admin/Dashboard';
 import { AuthProvider } from './contexts/AuthContext'; // Conserver l'AuthProvider
+import MyAccount from './elements/MyAccount';
+import MyApplications from './elements/MyApplications';
+
 
 function App() {
   return (
@@ -20,6 +23,12 @@ function App() {
               
               {/* Route pour l'admin dashboard */}
               <Route path="/admin/dashboard" element={<AdminPage />} />
+
+              {/* route pour "Mon Compte" */}
+              <Route path="/people/me" element={<MyAccount />} />
+
+              {/* route pour "Mes candidatures" */}
+              <Route path="/applications/me" element={<MyApplications />} />
               
               {/* Autres routes */}
             </Routes>

@@ -25,4 +25,17 @@ async function findUserTokenByEmail(email) {
   }
 }
 
-module.exports = { findUserByEmail, findUserTokenByEmail };
+// Fonction pour trouver un utilisateur par token (UUID)
+async function findUserByToken(uuid) {
+  try {
+    const user = await prisma.people.findUnique({
+      where: { id: uuid }, // Rechercher l'utilisateur par token (UUID)
+    });
+    return user;
+  } catch (error) {
+    console.error("Erreur lors de la recherche de l'utilisateur par UUID :", error);
+    throw new Error("Erreur lors de la recherche de l'utilisateur.");
+  }
+}
+
+module.exports = { findUserByEmail, findUserTokenByEmail, findUserByToken };
