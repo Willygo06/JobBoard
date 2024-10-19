@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // État pour le terme de recherche
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedApp, setSelectedApp] = useState(null);
   const [formData, setFormData] = useState({
     jobId: "",
@@ -31,33 +31,96 @@ const Applications = () => {
     setFormData(app);
   };
 
-  // Fonction pour filtrer les candidatures en fonction du terme de recherche
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const method = selectedApp ? 'PUT' : 'POST';
+    const url = selectedApp
+      ? `http://localhost:5000/api/applications/${selectedApp.id}`
+      : 'http://localhost:5000/api/applications/';
+
+    await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    setFormData({
+      jobId: "",
+      applicantId: "",
+      message: "",
+      state: "en attente",
+    });
+    setSelectedApp(null);
+    fetchApplications();
+  };
+
   const filteredApplications = applications.filter(app => {
     const applicantName = app.applicant ? `${app.applicant.firstName} ${app.applicant.lastName}` : "";
-    const guestName = app.guestName || ""; // Supposons que guestName est un champ de votre application
-    const uuid = app.uuid || ""; // Supposons que uuid est un champ de votre application
+    const guestName = app.guestName || "";
+    const uuid = app.uuid || "";
     return (
       applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       guestName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      uuid.toLowerCase().includes(searchTerm.toLowerCase()) // Recherche par UUID
+      uuid.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
   return (
-    <div className="mx-4"> {/* Marges à gauche et à droite */}
+    <div className="mx-4">
       <h3 className="text-xl font-bold mb-4">Liste des candidatures</h3>
+
+      {/* Formulaire d'ajout/modification */}
+      <form onSubmit={handleSubmit} className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          type="text"
+          placeholder="ID Annonce"
+          value={formData.jobId}
+          onChange={(e) => setFormData({ ...formData, jobId: e.target.value })}
+          required
+          className="border border-gray-300 p-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="ID Candidat"
+          value={formData.applicantId}
+          onChange={(e) => setFormData({ ...formData, applicantId: e.target.value })}
+          required
+          className="border border-gray-300 p-2 rounded"
+        />
+        <textarea
+          placeholder="Message"
+          value={formData.message}
+          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+          className="border border-gray-300 p-2 rounded"
+        />
+        <select
+          value={formData.state}
+          onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+          className="border border-gray-300 p-2 rounded"
+        >
+          <option value="en attente">En attente</option>
+          <option value="acceptée">Acceptée</option>
+          <option value="rejetée">Rejetée</option>
+        </select>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          {selectedApp ? "Modifier" : "Ajouter"}
+        </button>
+      </form>
+
       {/* Barre de recherche */}
       <input
         type="text"
         placeholder="Recherche par nom de candidat ou UUID"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="border p-2 rounded mb-4 box-content w-56"
+        className="border p-2 rounded mb-4 box-content w-full"
       />
+
+      {/* Tableau des candidatures */}
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
-            <th className="py-2 px-4 text-left">ID Annonce</th> {/* Nouvelle colonne pour l'ID de l'annonce */}
+            <th className="py-2 px-4 text-left">ID Annonce</th>
             <th className="py-2 px-4 text-left">Annonce</th>
             <th className="py-2 px-4 text-left">Candidat</th>
             <th className="py-2 px-4 text-left">Guest Name</th>
@@ -69,7 +132,7 @@ const Applications = () => {
         <tbody>
           {filteredApplications.map(app => (
             <tr key={app.id} className="border-t">
-              <td className="py-2 px-4">{app.advertisement.id}</td> {/* Affichage de l'ID de l'annonce */}
+              <td className="py-2 px-4">{app.advertisement.id}</td>
               <td className="py-2 px-4">{app.advertisement.title}</td>
               <td className="py-2 px-4">
                 {app.applicant ? `${app.applicant.firstName} ${app.applicant.lastName}` : "Inconnu"}
