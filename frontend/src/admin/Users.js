@@ -13,6 +13,7 @@ const Users = () => {
     zipcode: "",
     role: "user",
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -59,9 +60,29 @@ const Users = () => {
     setFormData(user);
   };
 
+    const handleSearch = (e) => {
+      setSearchTerm(e.target.value);
+    };
+  
+    const filteredUsers = users.filter(user =>
+      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.id.toString().includes(searchTerm)
+    );
+
   return (
-    <div className="max-w-screen-lg mx-auto p-4">
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-1">Rechercher</h2>
+      {/* Barre de recherche */}
+      <input
+        type="text"
+        placeholder="Rechercher par nom ou ID"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border border-gray-300 p-2 rounded mb-4 w-full"
+      />
       <h3 className="text-xl font-bold mb-4">Liste des utilisateurs</h3>
+
       <form onSubmit={handleSubmit} className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           type="text"
@@ -127,6 +148,7 @@ const Users = () => {
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
+            <th className="text-left py-2 px-4">ID</th>
             <th className="text-left py-2 px-4">Prénom</th>
             <th className="text-left py-2 px-4">Nom</th>
             <th className="text-left py-2 px-4">Email</th>
@@ -137,6 +159,7 @@ const Users = () => {
         <tbody>
           {users.map(user => (
             <tr key={user.id}>
+              <td className="py-2 px-4 border-b border-gray-300">{user.id}</td>
               <td className="py-2 px-4 border-b border-gray-300">{user.firstName}</td>
               <td className="py-2 px-4 border-b border-gray-300">{user.lastName}</td>
               <td className="py-2 px-4 border-b border-gray-300">{user.email}</td>

@@ -65,10 +65,10 @@ const Companies = () => {
       {/* Barre de recherche */}
       <input
         type="text"
-        placeholder="Rechercher par nom d'entreprise"
+        placeholder="Rechercher par nom d'entreprise ou ID"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="border border-gray-300 p-2 rounded mb-4 w-56"
+        className="border border-gray-300 p-2 rounded mb-4 w-full"
       />
         <h2 className="text-s font-bold mb-2">Ajouter une entreprise</h2>
       <form onSubmit={handleSubmit} className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
