@@ -20,18 +20,23 @@ const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
       });
       const data = await response.json();
       console.log("Réponse de l'API :", data);
-
+  
       if (data.result) {
-        onLogin(data.data); // Appel de la fonction onLogin fournie par Header
+        const uuid = data.data.id;
 
-        // Pour récupérer le cookie appelé "token"
+        if (uuid) {
+          // Stocker l'UUID dans le local storage
+          localStorage.setItem('uuid', uuid);
+          console.log("UUID stocké dans le localStorage :", uuid); // Ajout d'un log pour vérifier
+        } else {
+          console.error("UUID non trouvé dans la réponse");
+        }
+  
         toast.success("Connexion réussie !!");
-        document.cookie = `token=${data.data.token}; path=/`;
         setIsLoggedIn(true);
-        // const token = getCookie("token");
-        onClose(); // Fermer le pop-up
-        setEmail(""); // Réinitialiser le champ email
-        setPassword(""); // Réinitialiser le champ mot de passe
+        onClose();
+        setEmail("");
+        setPassword("");
       } else {
         toast.error(data.error);
       }
@@ -40,9 +45,9 @@ const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
       toast.error("Une erreur inattendue s'est produite.");
     }
   };
-
-  if (!isOpen) return null; // Ne rien afficher si le pop-up n'est pas ouvert
-
+  
+  if (!isOpen) return null;
+  
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg">

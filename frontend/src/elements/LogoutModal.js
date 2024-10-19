@@ -1,51 +1,34 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
-import { clearTokenCookie } from "../utils/cookiesGestion";
+import { clearUuidCookie, clearTokenCookie } from "../utils/cookiesGestion"; // Import pour supprimer le cookie
 import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LogoutModal = ({ onClose }) => {
   const { setIsLoggedIn } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    if (!email || !password) {
-      toast.error("Veuillez remplir tous les champs.");
-      return;
-    }
-    try {
-      const response = await fetch("http://localhost:5000/api/people/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      console.log("Réponse de l'API :", data);
 
-      if (data.result) {
-        // Pour récupérer le cookie appelé "token"
-        toast.success("Déconnexion réussie !!");
-        clearTokenCookie();
-        setIsLoggedIn(false);
-        // const token = getCookie("token");
-        onClose(); // Fermer le pop-up
-        setEmail(""); // Réinitialiser le champ email
-        setPassword(""); // Réinitialiser le champ mot de passe
-      } else {
-        toast.error(data.error);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion :", error);
-      toast.error("Une erreur inattendue s'est produite.");
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('uuid'); // Supprimer l'UUID du local storage
+    setIsLoggedIn(false);
+
+    // Met à jour l'état d'authentification
+    setIsLoggedIn(false);
+
+    toast.success("Déconnexion réussie !");
+    onClose(); // Fermer le pop-up
+
+    // Redirection vers la page d'accueil
+    navigate("/");
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex justify-between">
+      <div className="flex justify-between bg-white p-6 rounded">
         <button
           onClick={handleLogout}
-          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+          className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
         >
           Déconnexion
         </button>

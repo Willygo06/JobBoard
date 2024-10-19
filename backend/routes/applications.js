@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../prismaClient');
-const { checkBody } = require("../module/checkBody");
 
 // Route GET pour récupérer toutes les candidatures
 router.get('/', async (req, res, next) => {
@@ -17,6 +16,47 @@ router.get('/', async (req, res, next) => {
     next({ message: 'Erreur lors de la récupération des candidatures.', details: error.message });
   }
 });
+
+// Route GET pour chopper les candidatures de l'utilisateur connecté (pour /applications/me)
+router.get("/me", async (req, res) => {
+  const uuid = req.cookies.uuid;
+  console.log("Token:", uuid);
+  console.log("User found:", user);
+
+  if (!uuid) {
+    return res.status(401).json({ result: false, error: "Non autorisé" });
+  }
+
+  try {
+    // Récupérer l'utilisateur par le token ou une autre méthode
+    const user = await prisma.people.findFirst({
+      where: { token: uuid }, // Remplace par la méthode de récupération d'utilisateur
+      select: { id: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ result: false, error: "Utilisateur non trouvé" });
+    }
+
+    // Récupérer les candidatures de l'utilisateur
+    const applications = await prisma.application.findMany({
+      where: { applicantId: user.id }, // Assurez-vous que vous utilisez le bon champ ici
+      include: {
+        advertisement: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
+
+    return res.json(applications);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des candidatures:", error);
+    return res.status(500).json({ result: false, error: "Une erreur est survenue." });
+  }
+});
+
 
 // Route POST pour créer une nouvelle candidature
 router.post('/', async (req, res, next) => {
