@@ -30,6 +30,8 @@ LFG is much more than just a job listing site; it’s a friendly and intuitive s
 
 **Easy Application:** You can apply for job listings in just a few clicks.## Color Reference
 
+## Color Reference
+
 | Color             | Hex                                                                |
 | ----------------- | ------------------------------------------------------------------ |
 | Color | ![#000000](https://via.placeholder.com/10/0a192f?text=+) Black |
@@ -39,17 +41,14 @@ LFG is much more than just a job listing site; it’s a friendly and intuitive s
 
 ## Technologies Used
 
-**Frontend:** 
-    ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-
+ 
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
     
-
-**Backend:** 
-    ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) 
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) 
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
-**Database:** ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) 
+![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) 
 ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 
 
