@@ -1,7 +1,7 @@
 
 ## Installation
 
-Install jobboard with npm
+Install the jobboard with npm
 
 ```bash
   npm install jobboard-project
@@ -10,7 +10,7 @@ Install jobboard with npm
     
 # Project Title
 
-**Welcome to the Job Board project led by Clément Lores and Wilfried Gomes-Fortes. Students at Epitech Nice.**
+**Welcome to the Job Board project led by Clément Lores and Wilfried Gomes Fortes. Students at Epitech Nice.**
 
 
 
@@ -53,92 +53,8 @@ Install jobboard with npm
 
 **Notification:** React-Toastify 
 
-**Security Password:** Bcrypt and Regex
+**Password Security :** Bcrypt and Regex
 
-
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone git@github.com:Willygo06/JobBoard.git
-```
-
-Go to the project directory
-
-```bash
-  cd Jobboard
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Start the server
-
-```bash
-  node app.js
-```
-
-Start the Database
-
-```bash
-  npx prisma studio
-```
-
-Start the frontend
-
-```bash
-  npm start
-```
-
-
-## Usage
-
-```javascript
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './elements/header';
-import JobBoard from './jobboard';
-import Footer from './elements/footer';
-import BackToTop from './elements/backtotopbutton';
-import AdminPage from './admin/Dashboard';
-import { AuthProvider } from './contexts/AuthContext'; 
-import MyAccount from './elements/MyAccount';
-import MyApplications from './elements/MyApplications';
-
-
-function App() {
-  return (
-    <AuthProvider> 
-      <Router> 
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <div className="flex-grow">
-            <Routes>
-            
-              <Route path="/" element={<JobBoard />} />
-                          
-              <Route path="/admin/dashboard" element={<AdminPage />} />
-
-              <Route path="/people/me" element={<MyAccount />} />
-
-              <Route path="/applications/me" element={<MyApplications />} />
-              
-            </Routes>
-          </div>
-          <Footer />
-          <BackToTop />
-        </div>
-      </Router>
-    </AuthProvider>
-  );
-}
-
-export default App;
 
 
 ## API Reference
@@ -148,7 +64,7 @@ export default App;
 
 |   Route  | Method |      Description         |
 | :------- | :----- | :----------------------- |
-| `People` | `Post` | Create Account candidate |
+| `People` | `Post` | Create Candidate Account |
 
 const newPerson = await prisma.people.create({
       data: {
@@ -239,6 +155,90 @@ const newPerson = await prisma.people.create({
 
 
 
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:Willygo06/JobBoard.git
+```
+
+Go to the project directory
+
+```bash
+  cd Jobboard
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  node app.js
+```
+
+Start the Database
+
+```bash
+  npx prisma studio
+```
+
+Start the frontend
+
+```bash
+  npm start
+```
+
+
+## Usage
+
+```javascript
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './elements/header';
+import JobBoard from './jobboard';
+import Footer from './elements/footer';
+import BackToTop from './elements/backtotopbutton';
+import AdminPage from './admin/Dashboard';
+import { AuthProvider } from './contexts/AuthContext'; 
+import MyAccount from './elements/MyAccount';
+import MyApplications from './elements/MyApplications';
+
+
+function App() {
+  return (
+    <AuthProvider> 
+      <Router> 
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <div className="flex-grow">
+            <Routes>
+            
+              <Route path="/" element={<JobBoard />} />
+                          
+              <Route path="/admin/dashboard" element={<AdminPage />} />
+
+              <Route path="/people/me" element={<MyAccount />} />
+
+              <Route path="/applications/me" element={<MyApplications />} />
+              
+            </Routes>
+          </div>
+          <Footer />
+          <BackToTop />
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
+
+
 ## Documentation
 
 [Prisma](https://www.prisma.io/)
@@ -267,11 +267,4 @@ const newPerson = await prisma.people.create({
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
-
-## Roadmap
-
-- Additional browser support
-
-- Add more integrations
 
