@@ -11,7 +11,9 @@ Install the jobboard with npm
 # Project Title
 
 **Welcome to the Job Board project led by Clément Lores and Wilfried Gomes Fortes. Students at Epitech Nice.**
+In a world where job searching often resembles a true obstacle course for millions of candidates, two friends decided to make a change. Inspired by their own frustrating experiences, they envisioned a platform that would simplify the recruitment process. They called it LFG.
 
+LFG is much more than just a job listing site; it’s a friendly and intuitive space dedicated to posting job opportunities. With LFG, every candidate can create a unique profile, discover opportunities that match their skills, and apply in the blink of an eye. Their mission? To make job searching more accessible and enjoyable, transforming this quest into an enriching adventure.
 
 
 
