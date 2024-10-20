@@ -57,144 +57,7 @@ Install the jobboard with npm
 
 
 
-## API Reference
-
-#### Post 
-
-
-|   Route  | Method |      Description         |
-| :------- | :----- | :----------------------- |
-| `People` | `Post` | Create Candidate Account |
-
-const newPerson = await prisma.people.create({
-      data: {
-        firstName,
-        lastName,
-        email,
-        password: hash,
-        phone,
-        address,
-        zipcode,
-        role: role || "user", // Définit le rôle par défaut à 'user'
-      },
-    });
-    
- res.status(201).json({ result: true, person: newPerson });
-  } catch (error) {
-    console.error("Erreur lors de la création de la personne:", error);
-    
-
-
-#### Get 
-
-|      Route      | Method |      Description         |
-| :-------------- | :----- | :----------------------- |
-| `Advertisement` |  `Get` |  Fetch all job postings  |
-
-
- try {
-    const advertisements = await prisma.advertisements.findMany({
-      include: {
-        applications: true, // Inclure les candidatures liées
-        company: true, // Inclure les entreprises liées
-      },
-    });
-    res.json(advertisements);
-  } catch (error) {
-    next({
-      message: "Erreur lors de la récupération des annonces.",
-      details: error.message,
-    });
-  }
-});
-
-
-#### Put 
-
-|      Route      | Method |      Description         |
-| :-------------- | :----- | :----------------------- |
-|  `Application`  |  `Put` |   Edit an application    |
-
- const { id } = req.params;
-  const { jobId, applicantId, message, state } = req.body;
-  try {
-    const updatedApplication = await prisma.application.update({
-      where: { id: parseInt(id) },
-      data: {
-        jobId,
-        applicantId,
-        message,
-        state,
-      },
-    });
-    res.json(updatedApplication);
-  } catch (error) {
-    next({ message: 'Erreur lors de la mise à jour de la candidature.', details: error.message });
-  }
-});
-
-#### Delete
-
-|    Route    |  Method  |    Description       |
-| :---------- | :------- | :------------------- |
-|  `company`  | `Delete` |    Delete a company  |
-
-  const { id } = req.params;
-  try {
-    await prisma.advertisements.delete({
-      where: { id: parseInt(id) },
-    });
-    res.status(204).send();
-  } catch (error) {
-    next({
-      message: "Erreur lors de la suppression de l'annonce.",
-      details: error.message,
-    });
-  }
-});
-
-
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone git@github.com:Willygo06/JobBoard.git
-```
-
-Go to the project directory
-
-```bash
-  cd Jobboard
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Start the server
-
-```bash
-  node app.js
-```
-
-Start the Database
-
-```bash
-  npx prisma studio
-```
-
-Start the frontend
-
-```bash
-  npm start
-```
-
-
-## Usage
+## App.js
 
 ```javascript
 import React from 'react';
@@ -237,6 +100,151 @@ function App() {
 }
 
 export default App;
+````
+
+## API Reference
+
+#### Post 
+
+
+|   Route  | Method |      Description         |
+| :------- | :----- | :----------------------- |
+| `People` | `Post` | Create Candidate Account |
+
+```javascript
+const newPerson = await prisma.people.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        password: hash,
+        phone,
+        address,
+        zipcode,
+        role: role || "user", // Définit le rôle par défaut à 'user'
+      },
+    });
+    
+ res.status(201).json({ result: true, person: newPerson });
+  } catch (error) {
+    console.error("Erreur lors de la création de la personne:", error);
+````
+
+
+#### Get 
+
+|      Route      | Method |      Description         |
+| :-------------- | :----- | :----------------------- |
+| `Advertisement` |  `Get` |  Fetch all job postings  |
+
+```javascript
+ try {
+    const advertisements = await prisma.advertisements.findMany({
+      include: {
+        applications: true, // Inclure les candidatures liées
+        company: true, // Inclure les entreprises liées
+      },
+    });
+    res.json(advertisements);
+  } catch (error) {
+    next({
+      message: "Erreur lors de la récupération des annonces.",
+      details: error.message,
+    });
+  }
+});
+
+````
+
+#### Put 
+
+|      Route      | Method |      Description         |
+| :-------------- | :----- | :----------------------- |
+|  `Application`  |  `Put` |   Edit an application    |
+
+```javascript
+ const { id } = req.params;
+  const { jobId, applicantId, message, state } = req.body;
+  try {
+    const updatedApplication = await prisma.application.update({
+      where: { id: parseInt(id) },
+      data: {
+        jobId,
+        applicantId,
+        message,
+        state,
+      },
+    });
+    res.json(updatedApplication);
+  } catch (error) {
+    next({ message: 'Erreur lors de la mise à jour de la candidature.', details: error.message });
+  }
+});
+
+````
+
+#### Delete
+
+|    Route    |  Method  |    Description       |
+| :---------- | :------- | :------------------- |
+|  `company`  | `Delete` |    Delete a company  |
+
+```javascript
+  const { id } = req.params;
+  try {
+    await prisma.advertisements.delete({
+      where: { id: parseInt(id) },
+    });
+    res.status(204).send();
+  } catch (error) {
+    next({
+      message: "Erreur lors de la suppression de l'annonce.",
+      details: error.message,
+    });
+  }
+});
+
+````
+
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:Willygo06/JobBoard.git
+```
+
+Go to the project directory
+
+```bash
+  cd Jobboard
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  node app.js
+```
+
+Start the Database
+
+```bash
+  npx prisma studio
+```
+
+Start the frontend
+
+```bash
+  npm start
+```
 
 
 ## Documentation
