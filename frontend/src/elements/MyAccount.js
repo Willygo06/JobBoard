@@ -31,7 +31,7 @@ const MyAccount = () => {
       }
   
       try {
-        const response = await fetch(`http://localhost:5000/api/people/me`, {
+        const response = await fetch(`http://localhost:5000/api/people/me/me`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${userId}`,

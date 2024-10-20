@@ -5,7 +5,7 @@ const prisma = require("../prismaClient");
 const { checkBody } = require("../module/checkBody");
 const {
   findUserByEmail,
-  findUserTokenByEmail,
+  findRoleByEmail,
   findUserByToken,
 } = require("../module/userUtils");
 const bcrypt = require("bcrypt");
@@ -30,7 +30,7 @@ const verifyPassword = async (inputPassword, storedPassword) => {
   return await bcrypt.compare(inputPassword, storedPassword);
 };
 
-// Route GET pour récupérer les personnes par id
+// Route GET pour récupérer les personnes
 router.get("/", async (req, res, next) => {
   const { id } = req.query;
   try {
@@ -51,8 +51,29 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// Route GET pour récupérer un utilisateur par son ID
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log("ID parameter received:", req.params.id);
+
+  try {
+    const user = await prisma.people.findUnique({
+      where: { id: id },
+    });
+
+    if (!user) {
+      return res.status(404).json({ result: false, error: "Utilisateur non trouvé." });
+    }
+
+    return res.status(200).json({ result: true, data: user });
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'utilisateur :", error);
+    return res.status(500).json({ result: false, error: "Erreur du serveur." });
+  }
+});
+
 // Route GET pour récupérer les informations de l'utilisateur par token (UUID)
-router.get("/me", async (req, res) => {
+router.get("/me/me", async (req, res) => {
   const authHeader = req.headers.authorization;
   const uuid = authHeader && authHeader.split(' ')[1];
 
@@ -164,49 +185,46 @@ router.post("/", async (req, res, next) => {
 });
 
 // Route POST pour la connexion d'un utilisateur
-router.post("/login", async (req, res) => {
+router.post("/login", (req, res) => {
+  console.log("bonjour");
   const { email, password } = req.body;
+  console.log(email)
 
-  try {
-    // Trouver l'utilisateur par e-mail
-    const user = await findUserByEmail(email);
-    const uuid = await findUserTokenByEmail(email);
-    console.log(uuid);
+  findUserByEmail(email)
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(401)
+          .json({ result: false, error: "Utilisateur non trouvé." });
+      }
 
-    // Vérifier si l'utilisateur existe
-    if (!user) {
-      return res
-        .status(401)
-        .json({ result: false, error: "Utilisateur non trouvé." });
-    }
+      return verifyPassword(password, user.password).then((isPasswordValid) => {
+        if (!isPasswordValid) {
+          return res
+            .status(401)
+            .json({ result: false, error: "Mot de passe incorrect." });
+        }
 
-    // Vérifier le mot de passe
-    const isPasswordValid = await verifyPassword(password, user.password);
-    if (!isPasswordValid) {
-      return res
-        .status(401)
-        .json({ result: false, error: "Mot de passe incorrect." });
-    }
+        return findRoleByEmail(email).then((userRole) => {
+          const uuid = user.id; 
 
-    // Si tout est correct, retourner les données de l'utilisateur
-    return res
-      .cookie("uuid", user.id, {
-        httpOnly: true,
-        path: "/",
-      })
-      .json({
-        result: true,
-        data: {
-          id: user.id, // UUID de l'utilisateur
-          email: user.email
-        },
+          console.log("UUID:", uuid);
+          console.log("Role:", userRole);
+
+          return res.status(200).json({
+            result: true,
+            data: {
+              id: user.id,
+              role: userRole,
+            },
+          });
+        });
       });
-  } catch (error) {
-    console.error("Erreur lors de la connexion :", error);
-    return res
-      .status(500)
-      .json({ result: false, error: "Une erreur est survenue." });
-  }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la connexion :", error);
+      return res.status(500).json({ result: false, error: "Une erreur est survenue." });
+    });
 });
 
 // Route PUT pour mettre à jour une personne

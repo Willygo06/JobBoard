@@ -6,8 +6,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3000", // Autorise uniquement cette origine
-  credentials: true, // Permet l'envoi de cookies
+  origin: "http://localhost:3000",
 };
 
 // Import des routes
@@ -20,7 +19,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 
 // Utilisation des routes

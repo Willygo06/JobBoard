@@ -53,7 +53,7 @@ router.get("/me", async (req, res) => {
     return res.json(applications);
   } catch (error) {
     console.error("Erreur lors de la récupération des candidatures:", error);
-    return res.status(500).json({ result: false, error: "Une erreur est survenue." });
+    return res.status(500).json({ result: false, error: "Une erreur est survenue. zizi" });
   }
 });
 

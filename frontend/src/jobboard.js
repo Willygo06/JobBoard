@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ApplyPopup from './elements/ApplyPopup';
 import SearchBar from './elements/SearchBar';
-import JobList from './elements/Joblist'; // Importation du nouveau composant
+import JobList from './elements/Joblist';
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
@@ -15,7 +15,7 @@ const JobBoard = () => {
     // Récupérer les annonces depuis l'API
     const fetchJobs = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/advertisements'); // URL de l'API des annonces
+        const response = await fetch('http://localhost:5000/api/advertisements');
         const data = await response.json();
         setJobs(data);
         setFilteredJobs(data);
