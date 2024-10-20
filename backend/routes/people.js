@@ -5,7 +5,7 @@ const prisma = require("../prismaClient");
 const { checkBody } = require("../module/checkBody");
 const {
   findUserByEmail,
-  findUserTokenByEmail,
+  findRoleByEmail,
   findUserByToken,
 } = require("../module/userUtils");
 const bcrypt = require("bcrypt");
@@ -30,7 +30,7 @@ const verifyPassword = async (inputPassword, storedPassword) => {
   return await bcrypt.compare(inputPassword, storedPassword);
 };
 
-// Route GET pour récupérer les personnes par id
+// Route GET pour récupérer les personnes
 router.get("/", async (req, res, next) => {
   const { id } = req.query;
   try {
@@ -51,8 +51,29 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// Route GET pour récupérer un utilisateur par son ID
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log("ID parameter received:", req.params.id);
+
+  try {
+    const user = await prisma.people.findUnique({
+      where: { id: id },
+    });
+
+    if (!user) {
+      return res.status(404).json({ result: false, error: "Utilisateur non trouvé." });
+    }
+
+    return res.status(200).json({ result: true, data: user });
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'utilisateur :", error);
+    return res.status(500).json({ result: false, error: "Erreur du serveur." });
+  }
+});
+
 // Route GET pour récupérer les informations de l'utilisateur par token (UUID)
-router.get("/me", async (req, res) => {
+router.get("/me/me", async (req, res) => {
   const authHeader = req.headers.authorization;
   const uuid = authHeader && authHeader.split(' ')[1];
 
@@ -89,7 +110,6 @@ router.get("/me", async (req, res) => {
 
 // Route POST pour créer une nouvelle personne
 router.post("/", async (req, res, next) => {
-  // Vérifiez que les champs requis sont présents
   if (!checkBody(req.body, ["email", "password"])) {
     res.json({ result: false, error: "Champs vides ou manquants" });
     return;
@@ -106,23 +126,19 @@ router.post("/", async (req, res, next) => {
     role,
   } = req.body;
 
-  // Vérifiez si l'utilisateur existe déjà avec cet e-mail
   const existingUser = await prisma.people.findUnique({
     where: { email: email },
   });
 
-  // Si l'email existe déjà, retournez une erreur
   if (existingUser) {
     return res.status(400).json({ error: "L'e-mail est déjà utilisé." });
   }
 
-  // Vérifiez si l'email est valide
   if (!validateEmail(email)) {
     res.json({ result: false, error: "Adresse e-mail invalide" });
     return;
   }
 
-  // Vérifiez si le mot de passe respecte les critères de validation
   if (!validatePassword(password)) {
     res.json({
       result: false,
@@ -132,11 +148,9 @@ router.post("/", async (req, res, next) => {
     return;
   }
 
-  // Hachez le mot de passe avant de l'enregistrer
   const hash = bcrypt.hashSync(password, 10);
 
   try {
-    // Créez la nouvelle personne dans la base de données
     const newPerson = await prisma.people.create({
       data: {
         firstName,
@@ -146,67 +160,62 @@ router.post("/", async (req, res, next) => {
         phone,
         address,
         zipcode,
-        role: role || "user", // Définit le rôle par défaut à 'user'
+        role: role || "user", // rôle par défaut
       },
     });
 
-    // Retournez une réponse de succès avec la nouvelle personne créée
     res.status(201).json({ result: true, person: newPerson });
   } catch (error) {
-    // Gestion des erreurs lors de la création
     console.error("Erreur lors de la création de la personne:", error);
     res
       .status(500)
       .json({ error: "Erreur lors de la création de la personne.",        
-      details: error.message  // Ajoutez des détails sur l'erreur
+      details: error.message 
       });
   }
 });
 
 // Route POST pour la connexion d'un utilisateur
-router.post("/login", async (req, res) => {
+router.post("/login", (req, res) => {
+  console.log("bonjour");
   const { email, password } = req.body;
+  console.log(email)
 
-  try {
-    // Trouver l'utilisateur par e-mail
-    const user = await findUserByEmail(email);
-    const uuid = await findUserTokenByEmail(email);
-    console.log(uuid);
+  findUserByEmail(email)
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(401)
+          .json({ result: false, error: "Utilisateur non trouvé." });
+      }
 
-    // Vérifier si l'utilisateur existe
-    if (!user) {
-      return res
-        .status(401)
-        .json({ result: false, error: "Utilisateur non trouvé." });
-    }
+      return verifyPassword(password, user.password).then((isPasswordValid) => {
+        if (!isPasswordValid) {
+          return res
+            .status(401)
+            .json({ result: false, error: "Mot de passe incorrect." });
+        }
 
-    // Vérifier le mot de passe
-    const isPasswordValid = await verifyPassword(password, user.password);
-    if (!isPasswordValid) {
-      return res
-        .status(401)
-        .json({ result: false, error: "Mot de passe incorrect." });
-    }
+        return findRoleByEmail(email).then((userRole) => {
+          const uuid = user.id; 
 
-    // Si tout est correct, retourner les données de l'utilisateur
-    return res
-      .cookie("uuid", user.id, {
-        httpOnly: true,
-        path: "/",
-      })
-      .json({
-        result: true,
-        data: {
-          id: user.id, // UUID de l'utilisateur
-          email: user.email
-        },
+          console.log("UUID:", uuid);
+          console.log("Role:", userRole);
+
+          return res.status(200).json({
+            result: true,
+            data: {
+              id: user.id,
+              role: userRole,
+            },
+          });
+        });
       });
-  } catch (error) {
-    console.error("Erreur lors de la connexion :", error);
-    return res
-      .status(500)
-      .json({ result: false, error: "Une erreur est survenue." });
-  }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la connexion :", error);
+      return res.status(500).json({ result: false, error: "Une erreur est survenue." });
+    });
 });
 
 // Route PUT pour mettre à jour une personne

@@ -1,53 +1,68 @@
 import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthContext";
+import RegisterModal from './RegisterModal';
 
-const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
-  const { setIsLoggedIn } = useContext(AuthContext);
+const LoginModal = ({ isOpen, onClose }) => {
+  const { login } = useContext(AuthContext); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!email || !password) {
       toast.error("Veuillez remplir tous les champs.");
       return;
     }
-    try {
-      const response = await fetch("http://localhost:5000/api/people/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      console.log("Réponse de l'API :", data);
-  
-      if (data.result) {
-        const uuid = data.data.id;
 
-        if (uuid) {
-          // Stocker l'UUID dans le local storage
-          localStorage.setItem('uuid', uuid);
-          console.log("UUID stocké dans le localStorage :", uuid); // Ajout d'un log pour vérifier
-        } else {
-          console.error("UUID non trouvé dans la réponse");
+    fetch("http://localhost:5000/api/people/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Une erreur s'est produite lors de la connexion.");
         }
-  
-        toast.success("Connexion réussie !!");
-        setIsLoggedIn(true);
-        onClose();
-        setEmail("");
-        setPassword("");
-      } else {
-        toast.error(data.error);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la connexion :", error);
-      toast.error("Une erreur inattendue s'est produite.");
-    }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data); 
+
+        if (data.result) {
+          const { id: uuid, role } = data.data;
+          console.log(data.result);
+          localStorage.setItem('uuid', uuid);
+          localStorage.setItem('role', role);
+          console.log("UUID stocké :", localStorage.getItem('uuid')); 
+          console.log("Rôle stocké :", localStorage.getItem('role'));
+
+          toast.success("Connexion réussie !");
+          login(role); 
+
+          onClose();
+          setEmail("");
+          setPassword("");
+        } else {
+          toast.error(data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la connexion :", error);
+        toast.error("Une erreur inattendue s'est produite.");
+      });
   };
-  
+
+  const handleRegisterOpen = () => {
+    setIsRegisterOpen(true);
+  };
+
+  const handleRegisterClose = () => {
+    setIsRegisterOpen(false);
+  };
+
   if (!isOpen) return null;
-  
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -85,13 +100,16 @@ const LoginModal = ({ isOpen, onClose, onLogin, onRegister }) => {
         <div className="mt-4 text-sm">
           <p className="text-gray-500">Pas encore de compte?</p>
           <button
-            onClick={onRegister}
+            onClick={handleRegisterOpen} // Ouvrir le RegisterModal
             className="text-indigo-600 hover:text-indigo-800 underline"
           >
             Créer un compte
           </button>
         </div>
       </div>
+
+      {/* RegisterModal intégré ici */}
+      <RegisterModal isOpen={isRegisterOpen} onClose={handleRegisterClose} />
     </div>
   );
 };

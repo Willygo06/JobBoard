@@ -1,8 +1,7 @@
-import React, { useState } from "react"; // Importation des modules React et useState pour la gestion d'état
-import { toast } from "react-toastify"; // Importation de la bibliothèque toast pour afficher des notifications
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const RegisterModal = ({ isOpen, onClose }) => {
-  // État local pour stocker les informations de l'utilisateur
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -11,9 +10,9 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [address, setAddress] = useState(""); 
   const [zipcode, setZipcode] = useState("");
 
-  // Fonction pour gérer l'enregistrement de l'utilisateur
+  
   const handleRegister = (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page
+    e.preventDefault(); 
     fetch("http://localhost:5000/api/people", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,7 +30,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
       .then((data) => {
         if (data.result) {
           toast.success("Compte créé avec succès");
-          // Réinitialiser les champs
+
           setFirstName("");
           setLastName("");
           setEmail("");
@@ -39,11 +38,11 @@ const RegisterModal = ({ isOpen, onClose }) => {
           setPhone("");
           setAddress("");
           setZipcode("");
-          onClose(); // Fermer le modal immédiatement après le succès
+          onClose(); 
           setTimeout(() => {
-            onClose(); // Fermer le modal
-            toast.success("Merci d'avoir créé un compte !"); // Notification de remerciement
-          }, 2000); // 2000 ms = 2 secondes
+            onClose(); 
+            toast.success("Merci d'avoir créé un compte !"); 
+          }, 2000); // 2 millisecondes
         } else {
           toast.error(data.error);
         }
@@ -58,11 +57,10 @@ const RegisterModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      {/* Conteneur principal de la modal */}
       <div className="w-3/4 bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-xl text-black font-bold mb-4">Créer un compte LFG</h2>
         <form onSubmit={handleRegister} className="text-black">
-          {/* Champ pour le prénom */}
+
           <label htmlFor="firstName" className="text-gray-700">Prénom</label>
           <input
             type="text"
@@ -72,7 +70,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
             onChange={(e) => setFirstName(e.target.value)}
             className="border p-2 mb-4 w-full"
           />
-          {/* Champ pour le nom */}
+
           <label htmlFor="lastName" className="text-gray-700">Nom</label>
           <input
             type="text"
@@ -82,7 +80,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
             onChange={(e) => setLastName(e.target.value)}
             className="border p-2 mb-4 w-full"
           />
-          {/* Champ pour l'e-mail */}
+
           <label htmlFor="email" className="text-gray-700">E-mail</label>
           <input
             type="email"
@@ -92,7 +90,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
             onChange={(e) => setEmail(e.target.value)}
             className="border p-2 mb-4 w-full"
           />
-          {/* Champ pour le mot de passe */}
+
           <label htmlFor="password" className="text-gray-700">Mot de passe</label>
           <input
             type="password"
@@ -102,7 +100,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
             onChange={(e) => setPassword(e.target.value)}
             className="text-black border p-2 mb-4 w-full"
           />
-          {/* Champ pour le téléphone */}
+
           <label htmlFor="phone" className="text-gray-700">Téléphone</label>
           <input
             type="text"
@@ -112,7 +110,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
             onChange={(e) => setPhone(e.target.value)}
             className="border p-2 mb-4 w-full"
           />
-          {/* Champ pour l'adresse */}
+
           <label htmlFor="address" className="text-gray-700">Adresse</label>
           <input
             type="text"
@@ -122,7 +120,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
             onChange={(e) => setAddress(e.target.value)}
             className="border p-2 mb-4 w-full"
           />
-          {/* Champ pour le code postal */}
+
           <label htmlFor="zipcode" className="text-gray-700">Code Postal</label>
           <input
             type="text"
@@ -133,17 +131,17 @@ const RegisterModal = ({ isOpen, onClose }) => {
             className="border p-2 mb-4 w-full"
           />
           <div className="flex justify-between">
-            {/* Bouton pour soumettre le formulaire */}
+
             <button
-              type="submit" // Déclenche la soumission du formulaire
+              type="submit"
               className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
             >
               Créer un compte
             </button>
-            {/* Bouton pour fermer la modal sans soumettre */}
+
             <button
-              type="button" // Empêche la soumission du formulaire
-              onClick={onClose} // Appel de la fonction pour fermer la modal
+              type="button"
+              onClick={onClose}
               className="text-gray-500 py-2 px-4 rounded hover:bg-gray-200"
             >
               Fermer

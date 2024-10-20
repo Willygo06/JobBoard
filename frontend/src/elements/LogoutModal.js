@@ -1,43 +1,43 @@
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
-import { clearUuidCookie, clearTokenCookie } from "../utils/cookiesGestion"; // Import pour supprimer le cookie
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const LogoutModal = ({ onClose }) => {
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
 
   const handleLogout = () => {
-    localStorage.removeItem('uuid'); // Supprimer l'UUID du local storage
-    setIsLoggedIn(false);
-
-    // Met à jour l'état d'authentification
-    setIsLoggedIn(false);
+    localStorage.removeItem('uuid');
+    logout();
+    onClose();
 
     toast.success("Déconnexion réussie !");
-    onClose(); // Fermer le pop-up
+    onClose();
 
-    // Redirection vers la page d'accueil
     navigate("/");
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex justify-between bg-white p-6 rounded">
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
-        >
-          Déconnexion
-        </button>
-        <button
-          onClick={onClose}
-          className="text-gray-500 py-2 px-4 rounded hover:bg-gray-200"
-        >
-          Fermer
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded shadow-lg">
+        <h2 className="text-black text-lg font-semibold mb-4">Déconnexion</h2>
+        <p className="mb-6 text-black">Êtes-vous sûr de vouloir vous déconnecter ?</p>
+        <div className="flex justify-end space-x-4">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-400 hover:bg-gray-500 rounded"
+          >
+            Annuler
+          </button>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded"
+          >
+            Confirmer
+          </button>
+        </div>
       </div>
     </div>
   );

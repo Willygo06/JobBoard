@@ -1,45 +1,38 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState("guest");
-  const [userId, setUserId] = useState(null);
-  
+  const [userRole, setUserRole] = useState(null);
+
   useEffect(() => {
-    console.log("isLoggedIn:", isLoggedIn);
-    const checkAuthStatus = () => {
-      const uuid = localStorage.getItem('uuid'); // Vérifier dans le local storage
-      if (uuid) {
-        const { userId, role } = getUserRoleFromToken(uuid);
-        setUserRole(role);
-        setIsLoggedIn(true);
-        setUserId(userId);
-      }
-    };
-    checkAuthStatus();
+    const uuid = localStorage.getItem('uuid');
+    const role = localStorage.getItem('role');
+
+    if (uuid && role) {
+      setIsLoggedIn(true);
+      setUserRole(role);
+    }
   }, []);
 
-  
+  const login = (role) => {
+    setIsLoggedIn(true);
+    setUserRole(role);
+  };
+
+  const logout = () => {
+    setIsLoggedIn(false);
+    setUserRole(null);
+    localStorage.removeItem('uuid');
+    localStorage.removeItem('role');
+  };
+
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, userRole, setUserRole, userId }}
-    >
+    <AuthContext.Provider value={{ isLoggedIn, userRole, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-
-const getUserRoleFromToken = (uuid) => {
-  const adminToken = "84c0002b-72f5-443a-9d9d-27cabdf3fd76";
-
-  if (uuid === adminToken) {
-    console.log("Rôle attribué : admin");
-    return { userId: uuid, role: "admin" };
-  }
-  
-  console.log("Rôle attribué : user");
-  return { userId: uuid, role: "user" };
-};
+export default AuthContext;

@@ -24,9 +24,9 @@ const JobList = ({ jobs, filteredJobs, openJobId, toggleMoreInfo, openApplyPopup
                 <p className="text-gray-800 mt-2"><strong>Heures :</strong> {job.hours}</p>
                 <p className="text-gray-800 mt-2"><strong>Avantages :</strong> {job.benefits}</p>
                 <p className="text-gray-800 mt-2"><strong>Contact :</strong> {job.contactEmail}</p>
-                {/* Ajout du bouton Postuler ici */}
+                
                 <button
-                  onClick={() => openApplyPopup(job)} // Ouvre le popup de candidature
+                  onClick={() => openApplyPopup(job)}
                   className="mt-4 ml-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-200"
                 >
                   Postuler

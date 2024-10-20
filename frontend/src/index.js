@@ -1,24 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';  // Import Tailwind CSS
+import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ToastContainer } from 'react-toastify'; // Import du ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Import du CSS de Toastify
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
       <App />
       <ToastContainer
-        position="top-right" // Position des notifications
-        autoClose={5000} // Durée d'affichage des notifications
+        position="top-right"
+        autoClose={5000}
         hideProgressBar={false}
         closeOnClick
         pauseOnHover
         draggable
         pauseOnFocusLoss
-        theme="light" // Thème de notification
+        theme="light"
       />
   </React.StrictMode>
 );

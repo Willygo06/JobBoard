@@ -6,8 +6,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3000", // Autorise uniquement cette origine
-  credentials: true, // Permet l'envoi de cookies
+  origin: "http://localhost:3000",
 };
 
 // Import des routes
@@ -22,14 +21,13 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-
 // Utilisation des routes
 app.use("/api/advertisements", advertisementsRoutes);
 app.use("/api/applications", applicationsRoutes);
 app.use("/api/people", peopleRoutes);
 app.use("/api/companies", companiesRoutes);
 
-// Middleware de gestion des erreurs (doit être le dernier middleware)
+// Middleware de gestion des erreurs
 app.use(errorHandler);
 
 // Démarrage du serveur

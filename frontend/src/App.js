@@ -5,7 +5,7 @@ import JobBoard from './jobboard';
 import Footer from './elements/footer';
 import BackToTop from './elements/backtotopbutton';
 import AdminPage from './admin/Dashboard';
-import { AuthProvider } from './contexts/AuthContext'; // Conserver l'AuthProvider
+import { AuthProvider } from './contexts/AuthContext';
 import MyAccount from './elements/MyAccount';
 import MyApplications from './elements/MyApplications';
 
@@ -13,7 +13,7 @@ import MyApplications from './elements/MyApplications';
 function App() {
   return (
     <AuthProvider> {/* AuthProvider enveloppe l'application */}
-      <Router> {/* Router gère les routes */}
+      <Router>
         <div className="min-h-screen flex flex-col">
           <Header />
           <div className="flex-grow">

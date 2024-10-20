@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const prisma = require('../prismaClient'); // Assure-toi que le client Prisma est correctement importé
+const prisma = require('../prismaClient');
 
 
 // Route GET pour récupérer toutes les annonces
@@ -8,8 +8,8 @@ router.get("/", async (req, res, next) => {
   try {
     const advertisements = await prisma.advertisements.findMany({
       include: {
-        applications: true, // Inclure les candidatures liées
-        company: true, // Inclure les entreprises liées
+        applications: true,
+        company: true,
       },
     });
     res.json(advertisements);
@@ -46,7 +46,7 @@ router.post("/", async (req, res, next) => {
         hours,
         contactEmail,
         Company: {
-          connect: { id: companyId }, // Connecter l'entreprise par son ID
+          connect: { id: companyId },
         },
       },
     });
@@ -75,7 +75,6 @@ router.put("/:id", async (req, res, next) => {
   } = req.body;
 
   try {
-    // Mettre à jour l'annonce
     const updatedAdvertisement = await prisma.advertisements.update({
       where: { id: parseInt(id) },
       data: {
@@ -87,7 +86,7 @@ router.put("/:id", async (req, res, next) => {
         benefits,
         hours,
         contactEmail,
-        companyId: companyId ? parseInt(companyId) : null, // Assurez-vous que companyId est défini
+        companyId: companyId ? parseInt(companyId) : null,
       },
     });
 

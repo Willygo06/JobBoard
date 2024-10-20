@@ -20,7 +20,6 @@ const MyAccount = () => {
     const fetchUserData = async () => {
       if (!isLoggedIn) return;
   
-      // Récupérer l'UUID de l'utilisateur à partir du local storage
       const userId = localStorage.getItem('uuid');
       console.log("UUID récupéré depuis localStorage :", userId);
 
@@ -31,7 +30,7 @@ const MyAccount = () => {
       }
   
       try {
-        const response = await fetch(`http://localhost:5000/api/people/me`, {
+        const response = await fetch(`http://localhost:5000/api/people/me/me`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${userId}`,
@@ -42,7 +41,7 @@ const MyAccount = () => {
         console.log(data);
   
         if (data.result) {
-          setUserData(data.data); // Mettre à jour les données de l'utilisateur
+          setUserData(data.data);
         } else {
           toast.error(data.error);
         }
@@ -50,7 +49,7 @@ const MyAccount = () => {
         console.error("Erreur lors de la récupération des données :", error);
         toast.error("Une erreur est survenue lors de la récupération des données.");
       } finally {
-        setIsLoading(false); // Mettre à jour l'état de chargement dans tous les cas
+        setIsLoading(false);
       }
     };
   
@@ -85,7 +84,6 @@ const MyAccount = () => {
         body: JSON.stringify(userUpdateData),
       });
   
-      // Vérifie le statut de la réponse avant de convertir en JSON
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Erreur lors de la mise à jour des données.");
@@ -99,7 +97,7 @@ const MyAccount = () => {
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour des données :", error);
-      toast.error(error.message); // Affiche le message d'erreur spécifique
+      toast.error(error.message);
     }
   };
     

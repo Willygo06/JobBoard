@@ -1,7 +1,6 @@
 // userUtils.js
 const prisma = require("../prismaClient");
 
-// Fonction pour trouver un utilisateur par e-mail
 async function findUserByEmail(email) {
   try {
     const user = await prisma.people.findUnique({
@@ -13,6 +12,20 @@ async function findUserByEmail(email) {
     throw new Error("Erreur lors de la recherche de l'utilisateur.");
   }
 }
+
+async function findUserByToken(uuid) {
+  try {
+    const user = await prisma.people.findUnique({
+      where: { id: uuid },
+    });
+    return user;
+  } catch (error) {
+    console.error("Erreur lors de la recherche de l'utilisateur :", error);
+    throw new Error("Erreur lors de la recherche de l'utilisateur.");
+  }
+}
+
+
 async function findUserTokenByEmail(email) {
   try {
     const user = await prisma.people.findUnique({
@@ -25,11 +38,10 @@ async function findUserTokenByEmail(email) {
   }
 }
 
-// Fonction pour trouver un utilisateur par token (UUID)
-async function findUserByToken(uuid) {
+async function findRoleByToken(uuid) {
   try {
     const user = await prisma.people.findUnique({
-      where: { id: uuid }, // Rechercher l'utilisateur par token (UUID)
+      where: { id: uuid },
     });
     return user;
   } catch (error) {
@@ -38,4 +50,18 @@ async function findUserByToken(uuid) {
   }
 }
 
-module.exports = { findUserByEmail, findUserTokenByEmail, findUserByToken };
+async function findRoleByEmail(email) {
+  try {
+    const user = await prisma.people.findUnique({
+      where: { email: email },
+      select: { id: true, role: true }
+    });
+
+    return user.role;
+  } catch (error) {
+    console.error("Erreur lors de la recherche de l'utilisateur par email :", error);
+    throw new Error("Erreur lors de la recherche de l'utilisateur.");
+  }
+}
+
+module.exports = { findUserByEmail, findUserTokenByEmail, findRoleByToken, findRoleByEmail, findUserByToken };

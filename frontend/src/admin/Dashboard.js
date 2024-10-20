@@ -1,42 +1,49 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
-// Composants pour chaque section (Statistiques, Utilisateurs, etc.)
-import Users from "./Users"; // Section pour la gestion des utilisateurs
-import Advertisements from "./Advertisements"; // Section pour la gestion des annonces
-import Applications from "./Applications"; // Section pour la gestion des candidatures
-import Companies from "./Companies"; // Importer le module Companies
+import Users from "./Users"; 
+import Advertisements from "./Advertisements";
+import Applications from "./Applications";
+import Companies from "./Companies";
 
 const Dashboard = () => {
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalAdvertisements, setTotalAdvertisements] = useState(0);
   const [totalApplications, setTotalApplications] = useState(0);
   const [totalCompanies, setTotalCompanies] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const role = localStorage.getItem('role');
+    if (role !== 'admin') {
+      toast.error("Accès refusé. Vous n'êtes pas administrateur.");
+      navigate('/');
+    }
     const fetchData = async () => {
       try {
         const userResponse = await fetch("http://localhost:5000/api/people");
         const users = await userResponse.json();
-        setTotalUsers(users.length); // Compter le nombre d'utilisateurs
+        setTotalUsers(users.length);
 
         const advertisementResponse = await fetch("http://localhost:5000/api/advertisements");
         const advertisements = await advertisementResponse.json();
-        setTotalAdvertisements(advertisements.length); // Compter le nombre d'annonces
+        setTotalAdvertisements(advertisements.length);
 
         const applicationResponse = await fetch("http://localhost:5000/api/applications");
         const applications = await applicationResponse.json();
-        setTotalApplications(applications.length); // Compter le nombre de candidatures
+        setTotalApplications(applications.length);
 
         const companyResponse = await fetch("http://localhost:5000/api/companies");
         const companies = await companyResponse.json();
-        setTotalCompanies(companies.length); // Compter le nombre d'entreprises
+        setTotalCompanies(companies.length);
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
       }
     };
 
     fetchData();
-  }, []); // Le tableau vide [] signifie que cela ne s'exécutera qu'une seule fois lors du montage du composant
+  }, [navigate]); // Le tableau vide [] signifie que cela ne s'exécutera qu'une seule fois lors du montage du composant
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">

@@ -28,9 +28,8 @@ router.get("/me", async (req, res) => {
   }
 
   try {
-    // Récupérer l'utilisateur par le token ou une autre méthode
     const user = await prisma.people.findFirst({
-      where: { token: uuid }, // Remplace par la méthode de récupération d'utilisateur
+      where: { token: uuid },
       select: { id: true },
     });
 
@@ -38,9 +37,8 @@ router.get("/me", async (req, res) => {
       return res.status(404).json({ result: false, error: "Utilisateur non trouvé" });
     }
 
-    // Récupérer les candidatures de l'utilisateur
     const applications = await prisma.application.findMany({
-      where: { applicantId: user.id }, // Assurez-vous que vous utilisez le bon champ ici
+      where: { applicantId: user.id }, 
       include: {
         advertisement: {
           select: {
@@ -53,7 +51,7 @@ router.get("/me", async (req, res) => {
     return res.json(applications);
   } catch (error) {
     console.error("Erreur lors de la récupération des candidatures:", error);
-    return res.status(500).json({ result: false, error: "Une erreur est survenue." });
+    return res.status(500).json({ result: false, error: "Une erreur est survenue. zizi" });
   }
 });
 
@@ -66,11 +64,11 @@ router.post('/', async (req, res, next) => {
     const newApplication = await prisma.application.create({
       data: {
         jobId,
-        applicantId: applicantId || null, // Si l'utilisateur n'est pas connecté, applicantId sera null
+        applicantId: applicantId || null, 
         message,
         state: 'en attente',
-        guestName: guestName || null, // Stocker le nom si fourni
-        guestEmail: guestEmail || null, // Stocker l'email si fourni
+        guestName: guestName || null,
+        guestEmail: guestEmail || null,
       },
     });
     res.status(201).json(newApplication);
