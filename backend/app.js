@@ -27,7 +27,7 @@ app.use("/api/applications", applicationsRoutes);
 app.use("/api/people", peopleRoutes);
 app.use("/api/companies", companiesRoutes);
 
-// Middleware de gestion des erreurs (doit être le dernier middleware)
+// Middleware de gestion des erreurs
 app.use(errorHandler);
 
 // Démarrage du serveur

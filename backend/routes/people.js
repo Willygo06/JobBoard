@@ -110,7 +110,6 @@ router.get("/me/me", async (req, res) => {
 
 // Route POST pour créer une nouvelle personne
 router.post("/", async (req, res, next) => {
-  // Vérifiez que les champs requis sont présents
   if (!checkBody(req.body, ["email", "password"])) {
     res.json({ result: false, error: "Champs vides ou manquants" });
     return;
@@ -127,23 +126,19 @@ router.post("/", async (req, res, next) => {
     role,
   } = req.body;
 
-  // Vérifiez si l'utilisateur existe déjà avec cet e-mail
   const existingUser = await prisma.people.findUnique({
     where: { email: email },
   });
 
-  // Si l'email existe déjà, retournez une erreur
   if (existingUser) {
     return res.status(400).json({ error: "L'e-mail est déjà utilisé." });
   }
 
-  // Vérifiez si l'email est valide
   if (!validateEmail(email)) {
     res.json({ result: false, error: "Adresse e-mail invalide" });
     return;
   }
 
-  // Vérifiez si le mot de passe respecte les critères de validation
   if (!validatePassword(password)) {
     res.json({
       result: false,
@@ -153,11 +148,9 @@ router.post("/", async (req, res, next) => {
     return;
   }
 
-  // Hachez le mot de passe avant de l'enregistrer
   const hash = bcrypt.hashSync(password, 10);
 
   try {
-    // Créez la nouvelle personne dans la base de données
     const newPerson = await prisma.people.create({
       data: {
         firstName,
@@ -167,19 +160,17 @@ router.post("/", async (req, res, next) => {
         phone,
         address,
         zipcode,
-        role: role || "user", // Définit le rôle par défaut à 'user'
+        role: role || "user", // rôle par défaut
       },
     });
 
-    // Retournez une réponse de succès avec la nouvelle personne créée
     res.status(201).json({ result: true, person: newPerson });
   } catch (error) {
-    // Gestion des erreurs lors de la création
     console.error("Erreur lors de la création de la personne:", error);
     res
       .status(500)
       .json({ error: "Erreur lors de la création de la personne.",        
-      details: error.message  // Ajoutez des détails sur l'erreur
+      details: error.message 
       });
   }
 });

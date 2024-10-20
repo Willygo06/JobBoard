@@ -25,7 +25,7 @@ const Advertisements = () => {
     const response = await fetch("http://localhost:5000/api/advertisements");
     const data = await response.json();
     setAdvertisements(data);
-    setFilteredAds(data); // Initialiser filteredAds avec toutes les annonces
+    setFilteredAds(data);
   };
 
   const handleDelete = async (id) => {

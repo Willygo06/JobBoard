@@ -84,7 +84,6 @@ const MyAccount = () => {
         body: JSON.stringify(userUpdateData),
       });
   
-      // Vérifie le statut de la réponse avant de convertir en JSON
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Erreur lors de la mise à jour des données.");
@@ -98,7 +97,7 @@ const MyAccount = () => {
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour des données :", error);
-      toast.error(error.message); // Affiche le message d'erreur spécifique
+      toast.error(error.message);
     }
   };
     

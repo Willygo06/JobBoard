@@ -1,7 +1,6 @@
 // userUtils.js
 const prisma = require("../prismaClient");
 
-// Fonction pour trouver un utilisateur par e-mail
 async function findUserByEmail(email) {
   try {
     const user = await prisma.people.findUnique({
@@ -42,7 +41,7 @@ async function findUserTokenByEmail(email) {
 async function findRoleByToken(uuid) {
   try {
     const user = await prisma.people.findUnique({
-      where: { id: uuid }, // Rechercher l'utilisateur par token (UUID)
+      where: { id: uuid },
     });
     return user;
   } catch (error) {
@@ -50,7 +49,7 @@ async function findRoleByToken(uuid) {
     throw new Error("Erreur lors de la recherche de l'utilisateur.");
   }
 }
-// Fonction pour trouver un utilisateur par email
+
 async function findRoleByEmail(email) {
   try {
     const user = await prisma.people.findUnique({

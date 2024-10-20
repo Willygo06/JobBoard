@@ -37,8 +37,8 @@ const ApplyPopup = ({ job, onClose }) => {
         console.log(data);
 
         if (data.result) {
-          setGuestName(`${data.data.firstName} ${data.data.lastName}`); // Combine le prénom et le nom
-          setGuestEmail(data.data.email); // Récupère l'email de l'utilisateur
+          setGuestName(`${data.data.firstName} ${data.data.lastName}`); 
+          setGuestEmail(data.data.email); 
         } else {
           toast.error(data.error);
         }

@@ -18,7 +18,6 @@ router.get("/", async (req, res, next) => {
 
 // Route POST pour créer une nouvelle entreprise
 router.post("/", async (req, res, next) => {
-  // Vérifiez que les champs requis sont présents
   if (!checkBody(req.body, ["name", "industry", "location", "contactEmail"])) {
     return res.status(400).json({ result: false, error: "Champs vides ou manquants" });
   }
@@ -26,7 +25,6 @@ router.post("/", async (req, res, next) => {
   const { name, industry, location, website, contactEmail } = req.body;
 
   try {
-    // Créez la nouvelle entreprise dans la base de données
     const newCompany = await prisma.company.create({
       data: {
         name,
@@ -37,10 +35,8 @@ router.post("/", async (req, res, next) => {
       },
     });
     
-    // Retournez la nouvelle entreprise créée
     res.status(201).json(newCompany);
   } catch (error) {
-    // Gérer les erreurs en passant à la fonction middleware suivante
     next({
       message: "Erreur lors de la création de l'entreprise.",
       details: error.message,

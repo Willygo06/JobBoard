@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 const MyApplications = () => {
   const [applications, setApplications] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // État de chargement
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchApplications = async () => {
-      setLoading(true); // Commence le chargement
+      setLoading(true);
       try {
-        const response = await fetch('/api/applications/me'); // Vérifie si l'URL est correcte
+        const response = await fetch('/api/applications/me');
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des candidatures');
         }
@@ -18,7 +18,7 @@ const MyApplications = () => {
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoading(false); // Fin du chargement
+        setLoading(false);
       }
     };
 
@@ -26,11 +26,11 @@ const MyApplications = () => {
   }, []);
 
   if (loading) {
-    return <div>Chargement...</div>; // Afficher un message de chargement
+    return <div>Chargement...</div>; 
   }
 
   if (error) {
-    return <div>Erreur : {error}</div>; // Afficher l'erreur si elle existe
+    return <div>Erreur : {error}</div>; 
   }
 
   return (

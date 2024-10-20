@@ -1,6 +1,6 @@
 // Middleware de gestion des erreurs
 const errorHandler = (err, req, res, next) => {
-    console.error(err); // Log de l'erreur dans la console
+    console.error(err);
     const statusCode = err.statusCode || 500;
     res.status(statusCode).json({
       error: {

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Add any additional global styles below this comment */
+
 html {
-  scroll-behavior: smooth;  /* Enable smooth scrolling */
+  scroll-behavior: smooth;  
 }
