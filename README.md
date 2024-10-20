@@ -1,45 +1,156 @@
-<!-- Job board README file -->
 
-Welcome to the Job Board project led by Wilfried Gomes-Fortes and Clément Lores. Students at Epitech Nice.
+## Installation
 
-# Description
-LFG est une plateforme de recrutement en ligne qui publie des offres d'emploi des entreprises aux candidats
+Install jobboard with npm
 
-Esapce Candidat: L'utilisateur peuvent créer leur profil et postuler à des offres d'emplois
-Espace Administration: L'administrateurs peut publier des offres d'emplois, et gère les entreprises et les candidatures.
-Candidature simple: On peut postuler à des offres en quelques clics
+```bash
+  npm install jobboard-project
+  cd jobboard
+```
+    
+# Project Title
 
-Les technologies utilisées : 
-Backend: Nodejs / Express 
-Frontend: React / Tailwinds
-Base de donnée: My SQL/ prisma
+**Welcome to the Job Board project led by Clément Lores and Wilfried Gomes-Fortes. Students at Epitech Nice.**
 
-Pour exécuter le projet en local : 
 
-1. Cloner le repository :
+
+
+
+![Logo](https://pbs.twimg.com/profile_images/1671247989455683585/SGKA_txr_400x400.jpg)
+
+
+## Description
+
+**Candidate Area:** Users can create their profile and apply for job listings.
+
+**Admin Area:** Administrators can post job listings and manage companies and applications.
+
+**Easy Application:** You can apply for job listings in just a few clicks.## Color Reference
+
+| Color             | Hex                                                                |
+| ----------------- | ------------------------------------------------------------------ |
+| Color | ![#000000](https://via.placeholder.com/10/0a192f?text=+) Black |
+|  Color | ![#ffffff](https://via.placeholder.com/10/f8f8f8?text=+) White |
+
+
+
+## Technologies Used
+
+**Frontend:** 
+    ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+    
+
+**Backend:** 
+    ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) 
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+
+**Database:** ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) 
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+
+
+
+**Notification:** React-Toastify 
+
+**Security Password:** Bcrypt and Regex
+
+
+
+## Run Locally
+
+Clone the project
+
+```bash
   git clone git@github.com:Willygo06/JobBoard.git
+```
 
-2. Accédez au doosier du projet LFG:
-   cd jobboard
+Go to the project directory
 
-3. Installer les dépendances:
-  npm i
+```bash
+  cd Jobboard
+```
 
-4. Démarrer la base de donnée
-    npx prisma studio
+Install dependencies
 
-5. Démarer le serveur (backend) 
-   node App.js 
+```bash
+  npm install
+```
 
-6. Démarer le frontend 
+Start the server
+
+```bash
+  node app.js
+```
+
+Start the Database
+
+```bash
+  npx prisma studio
+```
+
+Start the frontend
+
+```bash
   npm start
+```
 
-## Les Routes 
 
-# Route pour Création de compte 
-Méthode: Post
+## Usage
 
- const newPerson = await prisma.people.create({
+```javascript
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './elements/header';
+import JobBoard from './jobboard';
+import Footer from './elements/footer';
+import BackToTop from './elements/backtotopbutton';
+import AdminPage from './admin/Dashboard';
+import { AuthProvider } from './contexts/AuthContext'; 
+import MyAccount from './elements/MyAccount';
+import MyApplications from './elements/MyApplications';
+
+
+function App() {
+  return (
+    <AuthProvider> 
+      <Router> 
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <div className="flex-grow">
+            <Routes>
+            
+              <Route path="/" element={<JobBoard />} />
+                          
+              <Route path="/admin/dashboard" element={<AdminPage />} />
+
+              <Route path="/people/me" element={<MyAccount />} />
+
+              <Route path="/applications/me" element={<MyApplications />} />
+              
+            </Routes>
+          </div>
+          <Footer />
+          <BackToTop />
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
+
+
+## API Reference
+
+#### Post 
+
+
+|   Route  | Method |      Description         |
+| :------- | :----- | :----------------------- |
+| `People` | `Post` | Create Account candidate |
+
+const newPerson = await prisma.people.create({
       data: {
         firstName,
         lastName,
@@ -55,12 +166,17 @@ Méthode: Post
  res.status(201).json({ result: true, person: newPerson });
   } catch (error) {
     console.error("Erreur lors de la création de la personne:", error);
-    res
+    
 
-# Route pour récupéerer toutes les annonces
-Méthode: Get
 
-  try {
+#### Get 
+
+|      Route      | Method |      Description         |
+| :-------------- | :----- | :----------------------- |
+| `Advertisement` |  `Get` |  Fetch all job postings  |
+
+
+ try {
     const advertisements = await prisma.advertisements.findMany({
       include: {
         applications: true, // Inclure les candidatures liées
@@ -76,9 +192,14 @@ Méthode: Get
   }
 });
 
-# Route pour modifier une candidature 
 
-  const { id } = req.params;
+#### Put 
+
+|      Route      | Method |      Description         |
+| :-------------- | :----- | :----------------------- |
+|  `Application`  |  `Put` |   Edit an application    |
+
+ const { id } = req.params;
   const { jobId, applicantId, message, state } = req.body;
   try {
     const updatedApplication = await prisma.application.update({
@@ -96,9 +217,11 @@ Méthode: Get
   }
 });
 
-# Route pour supprimer une annonce
-Méthode: Delete
+#### Delete
 
+|    Route    |  Method  |    Description       |
+| :---------- | :------- | :------------------- |
+|  `company`  | `Delete` |    Delete a company  |
 
   const { id } = req.params;
   try {
@@ -114,40 +237,41 @@ Méthode: Delete
   }
 });
 
-# Requete API pour l'inscription d'un candidat
 
-fetch("http://localhost:5000/api/people", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-        phone,
-        address,
-        zipcode,
-      }),
-    })
-(data.result) {
-          toast.success("Compte créé avec succès");
-          
-.catch((error) => {
-        console.error("Erreur lors de la création du compte:", error);
-        toast.error("Une erreur inattendue s'est produite.");
 
-# Requète API pour récupérer les anonces 
+## Documentation
 
-const fetchJobs = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/advertisements'); // URL de l'API des annonces
-        const data = await response.json();
-        setJobs(data);
-        setFilteredJobs(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Erreur lors du fetch des annonces:', error);
-        setLoading(false);
-      }
-    };
-    
+[Prisma](https://www.prisma.io/)
+
+[TailwindCSS](https://tailwindcss.com/)
+
+[MDN Web Docs](https://developer.mozilla.org/fr/)
+
+
+
+
+## Authors
+
+- [@ClémentLores](https://github.com/Klemso)
+- [@WilfriedGomesFortes](https://github.com/Willygo06)
+
+
+
+## 🔗 Links
+[![Clément Lores](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/cl%C3%A9ment-lores-72b3a319a/)
+
+[![wilfried](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/wilfried-gomes-fortes-610575326/)
+
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Roadmap
+
+- Additional browser support
+
+- Add more integrations
+
