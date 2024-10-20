@@ -1,19 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../contexts/AuthContext';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 
 const ApplyPopup = ({ job, onClose }) => {
+  const { isLoggedIn } = useContext(AuthContext);
   const [message, setMessage] = useState('');
   const [guestName, setGuestName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!isLoggedIn) return;
+
+      const userId = localStorage.getItem('uuid'); // Récupère l'UUID de l'utilisateur depuis localStorage
+      console.log("UUID récupéré depuis localStorage :", userId);
+
+      if (!userId) {
+        toast.error("Utilisateur non authentifié");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/people/me/me`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${userId}`,
+          },
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        if (data.result) {
+          setGuestName(`${data.data.firstName} ${data.data.lastName}`); // Combine le prénom et le nom
+          setGuestEmail(data.data.email); // Récupère l'email de l'utilisateur
+        } else {
+          toast.error(data.error);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
+        toast.error("Une erreur est survenue lors de la récupération des données.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [isLoggedIn]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Empêcher le rechargement de la page
+    e.preventDefault();
 
-    const applicantId = null; // Supposons que l'utilisateur n'est pas connecté
-    const jobId = job.id; // ID de l'emploi
+    const applicantId = localStorage.getItem('uuid');
+    const jobId = job.id;
 
     try {
       const response = await fetch('http://localhost:5000/api/applications', {
@@ -36,10 +80,10 @@ const ApplyPopup = ({ job, onClose }) => {
 
       const result = await response.json();
       console.log('Candidature envoyée:', result);
-      toast.success('Candidature envoyée avec succès !'); // Notification de succès
-      onClose(); // Ferme le popup après succès
+      toast.success('Candidature envoyée avec succès !');
+      onClose();
     } catch (error) {
-      toast.error(`Erreur : ${error.message}`); // Notification d'erreur
+      toast.error(`Erreur : ${error.message}`);
     }
   };
 
@@ -52,6 +96,7 @@ const ApplyPopup = ({ job, onClose }) => {
             <label className="block text-gray-700">Nom :</label>
             <input
               type="text"
+              placeholder="Nom complet"
               value={guestName}
               onChange={(e) => setGuestName(e.target.value)}
               className="border rounded w-full py-2 px-3"
@@ -62,6 +107,7 @@ const ApplyPopup = ({ job, onClose }) => {
             <label className="block text-gray-700">Email :</label>
             <input
               type="email"
+              placeholder="Email"
               value={guestEmail}
               onChange={(e) => setGuestEmail(e.target.value)}
               className="border-2 rounded w-full py-2 px-3"
@@ -72,6 +118,7 @@ const ApplyPopup = ({ job, onClose }) => {
             <label className="block text-gray-700">Message :</label>
             <textarea
               value={message}
+              placeholder='Ecrivez votre message'
               onChange={(e) => setMessage(e.target.value)}
               className="border-2 rounded w-full py-2 px-2"
               rows="4"

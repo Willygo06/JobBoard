@@ -12,7 +12,6 @@ const JobBoard = () => {
   const [selectedJob, setSelectedJob] = useState(null);
 
   useEffect(() => {
-    // Récupérer les annonces depuis l'API
     const fetchJobs = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/advertisements');

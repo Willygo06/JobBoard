@@ -20,7 +20,6 @@ const MyAccount = () => {
     const fetchUserData = async () => {
       if (!isLoggedIn) return;
   
-      // Récupérer l'UUID de l'utilisateur à partir du local storage
       const userId = localStorage.getItem('uuid');
       console.log("UUID récupéré depuis localStorage :", userId);
 
@@ -42,7 +41,7 @@ const MyAccount = () => {
         console.log(data);
   
         if (data.result) {
-          setUserData(data.data); // Mettre à jour les données de l'utilisateur
+          setUserData(data.data);
         } else {
           toast.error(data.error);
         }
@@ -50,7 +49,7 @@ const MyAccount = () => {
         console.error("Erreur lors de la récupération des données :", error);
         toast.error("Une erreur est survenue lors de la récupération des données.");
       } finally {
-        setIsLoading(false); // Mettre à jour l'état de chargement dans tous les cas
+        setIsLoading(false);
       }
     };
   
